@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 use App\Models\Post;
@@ -26,13 +27,19 @@ class PostsController extends Controller
 
     public function create()
     {
-        return view("posts.create");
+        $data["days"] = Day::where("status_id",3)->get();
+        $data["types"] = Type::where("status_id",3)->pluck("name","id");
+        $data["tags"] = Tag::where("status_id",3)->pluck("name","id");
+        $data["atts"] = Status::whereIn("id",["1","2"])->pluck("name","id");
+        $data["statuses"] = Status::whereIn("id",["3","4"])->pluck("name","id");
+        $data["gettoday"] = Carbon::today()->format("Y-m-d");
+        return view("posts.create",$data);
     }
 
 
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
 

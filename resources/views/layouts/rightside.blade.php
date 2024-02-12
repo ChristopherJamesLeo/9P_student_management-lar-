@@ -52,7 +52,7 @@
                             <div class="profile_group">
                                 <div class="">
                                     <a href="javascript:void(0)" class="nav-link profile_list" onclick="showProfileSet()">
-                                        <img src="./assets/imgs/profiles/about.jpg.webp" class="rounded-circle" width="30px" height="30px" alt="">
+                                        <img src="{{asset('./assets/imgs/profiles/about.jpg.webp')}}" class="rounded-circle" width="30px" height="30px" alt="">
                                     </a>
                                     <ul class="list-unstyled show_profile_setting">
                                         <li class="p-2">

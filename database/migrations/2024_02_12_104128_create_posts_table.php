@@ -23,7 +23,7 @@ return new class extends Migration
             $table->longText("content")->nullable();
             $table->string("slug");
             $table->unsignedBigInteger("tag_id");
-            $table->unsignedBigInteger("type_id");
+            $table->unsignedBigInteger("type_id")->default(1);
             $table->unsignedBigInteger("attshow")->default(3);
             $table->unsignedBigInteger("status_id")->default(1);
             $table->unsignedBigInteger("user_id");
