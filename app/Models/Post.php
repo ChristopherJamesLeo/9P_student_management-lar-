@@ -41,8 +41,8 @@ class Post extends Model
         return $this -> belongsTo(Type::class);
     }
 
-    public function attshow(){
-        return $this -> belongsTo(Status::class,"attshow");
+    public function attstatus(){
+        return $this -> belongsTo(Status::class,"attshow","id");
     }
 
     public function status(){
@@ -51,5 +51,9 @@ class Post extends Model
 
     public function user(){
         return $this -> belongsTo(User::class);
+    }
+
+    public function days(){
+        return $this -> morphToMany(Day::class,"dayable");
     }
 }

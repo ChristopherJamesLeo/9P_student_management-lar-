@@ -25,7 +25,7 @@ return new class extends Migration
             $table->unsignedBigInteger("tag_id");
             $table->unsignedBigInteger("type_id")->default(1);
             $table->unsignedBigInteger("attshow")->default(3);
-            $table->unsignedBigInteger("status_id")->default(1);
+            $table->unsignedBigInteger("status_id")->default(7);
             $table->unsignedBigInteger("user_id");
             $table->timestamps();
         });

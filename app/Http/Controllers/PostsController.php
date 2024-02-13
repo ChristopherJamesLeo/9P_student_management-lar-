@@ -14,6 +14,7 @@ use App\Models\Status;
 use App\Models\Tag;
 use App\Models\Type;
 use App\Models\Day;
+use App\Models\Dayable;
 
 class PostsController extends Controller
 {
@@ -31,7 +32,7 @@ class PostsController extends Controller
         $data["types"] = Type::where("status_id",3)->pluck("name","id");
         $data["tags"] = Tag::where("status_id",3)->pluck("name","id");
         $data["atts"] = Status::whereIn("id",["1","2"])->pluck("name","id");
-        $data["statuses"] = Status::whereIn("id",["3","4"])->pluck("name","id");
+        $data["statuses"] = Status::whereIn("id",["7","8","11"])->pluck("name","id");
         $data["gettoday"] = Carbon::today()->format("Y-m-d");
         return view("posts.create",$data);
     }
@@ -39,19 +40,98 @@ class PostsController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request["image"]);
+        $this -> validate($request,[
+            "image" => "image|mimes:jpg,jpeg,png|max:3072",
+            "name" => "required",
+            "startdate" => "required",
+            "enddate" => "required",
+            "starttime" => "required",
+            "endtime" => "required",
+            "tag_id" => "required",
+        ]);
+
+        $userId = Auth::user()->id;
+        $post = new Post();
+        $post -> name = $request["name"];
+        $post -> startdate = $request["startdate"];
+        $post -> enddate = $request["enddate"];
+        $post -> starttime = $request["starttime"];
+        $post -> endtime = $request["endtime"];
+        $post -> fee = $request["fee"];
+        $post -> content = $request["content"];
+        $post -> slug = Str::slug($request["name"]);
+        $post -> tag_id = $request["tag_id"];
+        $post -> type_id = $request["type_id"];
+        $post -> attshow = $request["attshow"];
+        $post -> status_id = $request["status_id"];
+        $post -> user_id = $userId;
+
+        // dd($request["image"]);
+
+        if(file_exists($request["image"])){
+
+            // dd("true");
+
+            $file = $request->file("image");
+
+            $fname = $file->getClientOriginalName();
+
+            $newfilename = uniqid().time().$fname;
+
+            $file -> move(public_path("assets/imgs/posts/"),$newfilename);
+
+            $filepath = "assets/imgs/posts/".$newfilename;
+
+            $post -> image = $filepath;
+        }
+
+        $post -> save();
+
+
+        if($post->id){
+            if($request["days"] > 0){
+                // dd($request["dayable_type"]);
+                for($i = 0 ; $i < count($request["days"]) ; $i++){
+                    Dayable::create([
+                        "day_id" => $request["days"][$i],
+                        "dayable_id" => $post->id,
+                        "dayable_type" => $request["dayable_type"]
+                    ]);
+                }
+            }
+        }
+
+        session()->flash("success","Data Insert Successful");
+
+        return redirect()->route("posts.index");
+
     }
 
 
     public function show(string $id)
     {
-        //
+        $data["post"] = Post::findOrFail($id);
+        
+        $data["days"] = Day::where("status_id",3)->get();
+
+        $data["types"] = Type::where("status_id",3)->pluck("name","id");
+
+        $data["tags"] = Tag::where("status_id",3)->pluck("name","id");
+
+        $data["atts"] = Status::whereIn("id",["1","2"])->pluck("name","id");
+
+        $data["statuses"] = Status::whereIn("id",["7","8","11"])->pluck("name","id");
+
+        $data["gettoday"] = Carbon::today()->format("Y-m-d");
+
+        return view("posts.show",$data);
     }
 
 
     public function edit(string $id)
     {
-        //
+
     }
 
 
@@ -63,21 +143,24 @@ class PostsController extends Controller
 
     public function destroy(string $id)
     {
-        //
+        $post = Post::findOrFail($id);
+
+        $file = $post->image;
+
+        // dd($file);
+
+        if(File::exists($file)){
+            File::delete($file);
+        }
+
+        $days = Dayable::where("dayable_type",request("dayable_type"))->where("dayable_id",$post->id)->delete();
+
+        $post->delete();
+        
+        session()->flash("success","Post Delete Successful");
+
+        return redirect()->route("posts.index");
     }
 
 
-    // change status
-
-    public function poststatus(Request $request){
-
-        // dd($request["id"]);
-
-        $role = Post::findOrFail($request["id"]);
-
-        $role->status_id = $request["status_id"];
-
-        $role -> save();
-
-    }
 }

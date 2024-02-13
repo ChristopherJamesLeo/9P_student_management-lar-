@@ -238,6 +238,7 @@
             }
             reader.readAsDataURL(this.files[0]);
         })
+
     })
 </script>
 @endsection
