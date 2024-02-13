@@ -40,11 +40,11 @@
                         <small class="">{{$post->tag->name}}</small>
                         <div class="d-flex justify-content-between">
                             <div>
-                                <span class="d-block text-start" style="font-size: 13px">Attended Show</span>
+                                <span class="d-block text-start fw-bold" style="font-size: 13px">Attended Show</span>
                                 <span class="d-block text-start" style="font-size: 13px">{{$post->attstatus->name}}</span>
                             </div>
                             <div>
-                                <span class="d-block text-end" style="font-size: 13px">Status</span>
+                                <span class="d-block text-end fw-bold" style="font-size: 13px">Status</span>
                                 <span class="d-block text-end" style="font-size: 13px">{{$post->status->name}}</span>
                             </div>
                         </div>
@@ -127,7 +127,7 @@
                             data-bs-toggle="modal"
                             data-bs-target="#delete_model"
                             data-id={{$post->id}}  
-                            data-email = {{$post->user->email}}
+                            data-email = {{Auth::user()->email}}
                             class="w-100 btn btn-outline-primary rounded-0 shadow-none outline-none delete_btn">Delete</a>
                         </div>
                         <form id="formdelete{{$post->id}}" action="{{route('posts.destroy',$post->id)}}" method="POST">

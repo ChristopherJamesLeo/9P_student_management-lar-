@@ -131,13 +131,102 @@ class PostsController extends Controller
 
     public function edit(string $id)
     {
+        $data["post"] = Post::findOrFail($id);
+        
+        $data["days"] = Day::where("status_id",3)->get();
 
+        $data["dayables"] = $data["post"]->days()->get();
+
+        $data["types"] = Type::where("status_id",3)->pluck("name","id");
+
+        $data["tags"] = Tag::where("status_id",3)->pluck("name","id");
+
+        $data["atts"] = Status::whereIn("id",["1","2"])->pluck("name","id");
+
+        $data["statuses"] = Status::whereIn("id",["7","8","11"])->pluck("name","id");
+
+        $data["gettoday"] = Carbon::today()->format("Y-m-d");
+
+        return view("posts.edit",$data);
     }
 
 
     public function update(Request $request, string $id)
     {
-        //
+        $this -> validate($request,[
+            "image" => "required|image|mimes:jpg,jpeg,png|max:3072",
+            "name" => "required",
+            "startdate" => "required",
+            "enddate" => "required",
+            "starttime" => "required",
+            "endtime" => "required",
+            "tag_id" => "required",
+        ]);
+        
+        
+        $post = Post::findOrFail($id);
+
+        // dd($post);
+        $file = $post->image;
+    
+        if(File::exists($file)){
+            File::delete($file);
+        }
+        
+        $userId = Auth::user()->id;
+
+        $post -> name = $request["name"];
+        $post -> startdate = $request["startdate"];
+        $post -> enddate = $request["enddate"];
+        $post -> starttime = $request["starttime"];
+        $post -> endtime = $request["endtime"];
+        $post -> fee = $request["fee"];
+        $post -> content = $request["content"];
+        $post -> slug = Str::slug($request["name"]);
+        $post -> tag_id = $request["tag_id"];
+        $post -> type_id = $request["type_id"];
+        $post -> attshow = $request["attshow"];
+        $post -> status_id = $request["status_id"];
+        $post -> user_id = $userId;
+        
+                // dd($request["image"]);
+        
+        if(file_exists($request["image"])){
+
+            $file = $request->file("image");
+        
+            $fname = $file->getClientOriginalName();
+        
+            $newfilename = uniqid().time().$fname;
+        
+            $file -> move(public_path("assets/imgs/posts/"),$newfilename);
+        
+            $filepath = "assets/imgs/posts/".$newfilename;
+        
+            $post -> image = $filepath;
+        }
+        
+        $post -> save();
+
+        $days = Dayable::where("dayable_type",request("dayable_type"))->where("dayable_id",$post->id)->delete();
+        
+        
+        if($post->id){
+            if($request["days"] > 0){
+                // dd($request["dayable_type"]);
+                for($i = 0 ; $i < count($request["days"]) ; $i++){
+                    Dayable::create([
+                        "day_id" => $request["days"][$i],
+                        "dayable_id" => $post->id,
+                        "dayable_type" => $request["dayable_type"]
+                    ]);
+                }
+            }
+        }
+        
+        session()->flash("success","Data Update Successful");
+        
+        return redirect()->route("posts.show",$id);
     }
 
 
