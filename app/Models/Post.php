@@ -31,6 +31,9 @@ class Post extends Model
         "user_id"
     ];
 
+    public function getpost(){
+        return $this->where("id",auth()->user()->id)->get();
+    }
 
 
     public function tag(){
@@ -55,5 +58,9 @@ class Post extends Model
 
     public function days(){
         return $this -> morphToMany(Day::class,"dayable");
+    }
+
+    public function comments(){
+        return $this -> morphMany(Comment::class,"commentable");
     }
 }

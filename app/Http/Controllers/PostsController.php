@@ -10,6 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 use App\Models\Post;
+use App\Models\Comment;
 use App\Models\Status;
 use App\Models\Tag;
 use App\Models\Type;
@@ -154,7 +155,7 @@ class PostsController extends Controller
     public function update(Request $request, string $id)
     {
         $this -> validate($request,[
-            "image" => "required|image|mimes:jpg,jpeg,png|max:3072",
+            "image" => "required|image|mimes:jpg,jpeg,png,jpg.webp|max:3072",
             "name" => "required",
             "startdate" => "required",
             "enddate" => "required",
@@ -236,13 +237,13 @@ class PostsController extends Controller
 
         $file = $post->image;
 
-        // dd($file);
-
         if(File::exists($file)){
             File::delete($file);
         }
 
         $days = Dayable::where("dayable_type",request("dayable_type"))->where("dayable_id",$post->id)->delete();
+
+        $comments = Comment::where("commentable_id",$post->id)->where("commentable_type","App\Models\Post")->delete();
 
         $post->delete();
         

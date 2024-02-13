@@ -10,7 +10,7 @@
     }
 
     .comment_box {
-        max-height: 500px;
+        /* max-height: 500px; */
         padding: 10px;
         border: 1px solid #f4f4f4;
 
@@ -147,7 +147,8 @@
                         </p>
                     </div>
                     <div class="comment_box">
-                        <ul class="list-unstyled">
+                        @livewire('post.comment',["post_id"=>$post->id])
+                        {{-- <ul class="list-unstyled">
                             <li class="">
                                 <p>
                                     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minima voluptatem nihil excepturi illo fuga minus, consequatur laborum dolorum quia doloremque culpa, aspernatur debitis omnis nobis et molestias ut, non odio!
@@ -159,17 +160,21 @@
                             </li>
                             <li>
                                 <form action="" method="POST">
+                                    @csrf
+                                    @method("POST")
                                     <div class="form-group">
                                         <div class="input-group">
                                             <input type="text" name="name" id="name" class="form-control rounded-0 outline-none shadow-none " autocomplete="off"
                                             placeholder="Comment here...">
-                                            <button class="btn btn-info text-white"><i class="fas fa-paper-plane"></i></button>
+                                            <input type="hidden" name="commentable_type" value="App\Models\Post">
+                                            <input type="hidden" name="commentable_id" value="{{$post->id}}">
+                                            <button type="submit" class="btn btn-info text-white"><i class="fas fa-paper-plane"></i></button>
                                         </div>
                                        
                                     </div>
                                 </form>
                             </li>
-                        </ul>
+                        </ul> --}}
                     </div>
 
                     
