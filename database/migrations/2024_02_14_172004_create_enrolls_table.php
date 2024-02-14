@@ -12,6 +12,7 @@ return new class extends Migration
         Schema::create('enrolls', function (Blueprint $table) {
             $table->id();
             $table -> foreignId("post_id")->constrained("posts")->onUpdate("cascade")->onDelete("cascade");
+            $table -> unsignedBigInteger("stage_id")->default(2);
             
             $table -> foreignId("user_id")->constrained("users")->onUpdate("cascade")->onDelete("cascade");
             $table->timestamps();

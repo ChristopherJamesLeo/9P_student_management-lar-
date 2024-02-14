@@ -5,9 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Notifications\Notifiable;
+
 class Enroll extends Model
 {
     use HasFactory;
+
+    use Notifiable;
 
     protected $table = "enrolls";
 
@@ -15,6 +19,7 @@ class Enroll extends Model
 
     protected $fillable = [
         "post_id",
+        "stage_id",
         "user_id"
     ];
 
@@ -22,4 +27,23 @@ class Enroll extends Model
         return $this -> belongsTo(User::class);
     }
     
+    public function post(){
+        return $this -> belongsTo(Post::class);
+    }
+
+    public function postname(){
+        return $this -> post ->name;
+    }
+
+    public function postid(){
+        return $this -> post ->id;
+    }
+
+    public function stage(){
+        return $this -> belongsTo(Stage::class,"stage_id","id");
+    }
+
+    public function stagename(){
+        return $this -> stage -> name;
+    }
 }

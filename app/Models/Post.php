@@ -7,9 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Support\Facades\Auth;
 
+
+use Illuminate\Notifications\Notifiable;
+
 class Post extends Model
 {
     use HasFactory;
+
+    use Notifiable;
 
 
     protected $table = "posts";
