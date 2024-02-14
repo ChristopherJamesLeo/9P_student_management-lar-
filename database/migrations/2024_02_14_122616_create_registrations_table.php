@@ -12,8 +12,7 @@ return new class extends Migration
         Schema::create('registrations', function (Blueprint $table) {
             $table->id();
             $table->string("reg_no");
-            $table->foreignId("registrable_id")->constrained("users")->onUpdate("cascade")->onDelete("cascade");
-            $table->string("registrable_type");
+            $table->foreignId("user_id")->constrained("users")->onUpdate("cascade")->onDelete("cascade");
             $table->timestamps();
         });
     }

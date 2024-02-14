@@ -50,8 +50,7 @@ class RegisteredUserController extends Controller
         $reglist = new Registration();
 
         $reglist -> reg_no = "BID_".$user->id;
-        $reglist -> registrable_id = $user->id;
-        $reglist -> registrable_type = "App\Models\User";
+        $reglist -> user_id = $user->id;
 
         $reglist->save();
 

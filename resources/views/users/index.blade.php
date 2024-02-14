@@ -4,7 +4,7 @@
     {{-- start create status --}}
     <div class="row">
         <div>
-            <a href="{{route('users.create')}}" wire:navigate class="btn btn-primary rounded-0">Create</a>
+            {{-- <a href="{{route('users.create')}}" wire:navigate class="btn btn-primary rounded-0">Create</a> --}}
             <hr>
             <div class="mt-3 row">
                 {{-- <div class="table_container" style="overflow-x: scroll;"> --}}
@@ -15,7 +15,6 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Image</th>
                                     <th>Name</th>
                                     <th>Reg No.</th>
                                     <th>Email</th>
@@ -33,14 +32,13 @@
                                 @foreach ($users as $idx => $user)
                                     <tr>
                                         <td>{{$idx + $users -> firstItem()}}</td>
-                                        <td></td>
                                         <td>
                                             <a href="{{route('users.show',$user->id)}}" 
                                                 wire:navigate
-                                                class="nav-link">{{$user->name}}</a>
+                                                class="">{{$user->name}}</a>
                                         </td>
                                         <td>
-                                            {{$user->reg}}
+                                            {{$user->registration->reg_no}}
                                         </td>
                                         <td>{{$user->email}}</td>
                                         <td>{{$user->gender->name}}</td>

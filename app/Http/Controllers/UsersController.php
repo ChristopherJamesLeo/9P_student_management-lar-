@@ -30,7 +30,11 @@ class UsersController extends Controller
 
     public function show(string $id)
     {
-        //
+        $data["user"] = User::findOrFail($id);
+
+        // dd($data["user"]);
+
+        return view("users.show",$data);
     }
 
 
