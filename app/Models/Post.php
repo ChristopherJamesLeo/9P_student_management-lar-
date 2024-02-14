@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Support\Facades\Auth;
+
 class Post extends Model
 {
     use HasFactory;
@@ -62,5 +64,9 @@ class Post extends Model
 
     public function comments(){
         return $this -> morphMany(Comment::class,"commentable");
+    }
+
+    public function checkenroll($user_id) {
+        return \DB::table("enrolls")->where("post_id",$this->id)->where("user_id",$user_id)->exists();
     }
 }

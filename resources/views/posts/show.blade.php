@@ -31,7 +31,58 @@
     {{-- start create status --}}
     <div class="row">
         <div>
-            <a href="{{route('posts.index')}}" wire:navigate class="btn btn-primary rounded-0">Back</a>
+            <div class="d-flex gap-2">
+                <a href="{{route('posts.index')}}" wire:navigate class="btn btn-primary rounded-0">Back</a>
+            
+                @if (!$post->checkenroll(Auth::user()->id))
+                    {{-- start enroll --}}
+                    <button type="button" id="enroll_btn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#confirm_box"
+                     class="btn btn-outline-primary rounded-0">Enroll</button>
+                    
+                    {{-- end enroll --}}
+                @endif
+
+                <form action="{{route('enrolls.store')}}" method="POST" id="enroll_form">
+                    @csrf
+                    @method("POST")
+                    <input type="hidden" name="post_id" value="{{$post->id}}">
+                </form>
+
+                {{-- start model --}}
+                <div id="confirm_box"  class="modal fade" >
+                    <div class="modal-dialog modal-sm modal-dialog-center">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6>Confrim Submit</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="confirm_enroll" method="POST">
+                                    <input type="hidden" name="" id="" class="user_email_box" value="{{$post->user->email}}">
+                                    <div class="row">
+                                       
+                                        <div class="col-12 mb-3 form-group">
+                                            <input type="text" name="name" id="" class="form-control rounded-0 outline-none shadow-none border" placeholder="" value="{{$post->name}}" readonly >
+                                        </div>
+                                        <div class="col-12 mb-3 form-group">
+                                            <input type="email" class="form-control rounded-0 outline-none shadow-none border confirm_enroll_box" placeholder="Confirm Your Email" value="">
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" class="btn btn-primary rounded-0 outline-none shadow-none confirm_enroll">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- end model --}}
+            </div>
+
             <hr>
             <div class="mt-3 row">
                 <div class="col-md-4 col-sm-12 mb-3">
@@ -148,33 +199,6 @@
                     </div>
                     <div class="comment_box">
                         @livewire('post.comment',["post_id"=>$post->id])
-                        {{-- <ul class="list-unstyled">
-                            <li class="">
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minima voluptatem nihil excepturi illo fuga minus, consequatur laborum dolorum quia doloremque culpa, aspernatur debitis omnis nobis et molestias ut, non odio!
-                                </p>
-                                <div class="d-flex justify-content-end">
-                                    <small class="fw-bold">Username | <small class="fw-normal">12 minutes ago</small></small> 
-                                   
-                                </div>
-                            </li>
-                            <li>
-                                <form action="" method="POST">
-                                    @csrf
-                                    @method("POST")
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <input type="text" name="name" id="name" class="form-control rounded-0 outline-none shadow-none " autocomplete="off"
-                                            placeholder="Comment here...">
-                                            <input type="hidden" name="commentable_type" value="App\Models\Post">
-                                            <input type="hidden" name="commentable_id" value="{{$post->id}}">
-                                            <button type="submit" class="btn btn-info text-white"><i class="fas fa-paper-plane"></i></button>
-                                        </div>
-                                       
-                                    </div>
-                                </form>
-                            </li>
-                        </ul> --}}
                     </div>
 
                     
@@ -236,6 +260,18 @@
                 window.alert("Permission Denied");
             }
             
+        })
+
+        $(".confirm_enroll").click(function(){
+            let getUserEmail = $(".user_email_box").val();
+            let getEmail = $(".confirm_enroll_box").val();
+
+            // console.log(getUserEmail,getEmail);
+            if(getUserEmail === getEmail){
+                $(`#enroll_form`).submit();
+            }else{
+                window.alert("Permission Denied");
+            }
         })
 
     })

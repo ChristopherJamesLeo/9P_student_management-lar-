@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\CountriesController;
 use App\Http\Controllers\DaysController;
+use App\Http\Controllers\EnrollsController;
 use App\Http\Controllers\GendersController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\RolesController;
@@ -38,6 +39,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('days',DaysController::class);
     Route::get('/daystatus',[DaysController::class,"daystatus"]);
+
+
+    Route::resource('enrolls',EnrollsController::class);
 
     Route::resource('genders',GendersController::class);
     Route::get('/genderstatus',[GendersController::class,"genderstatus"]);
