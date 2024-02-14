@@ -14,21 +14,27 @@
                                     <a href="{{route('posts.index')}}" wire:navigate class="nav-link ">Post</a>
                                 </li>
 
+                                <li class="">
+                                    <a href="{{route('users.index')}}" wire:navigate class="nav-link ">User</a>
+                                </li>
+
                                 <li class="" data-bs-toggle="collapse" data-bs-target="#addon">
                                     <a href="javascript:void(0)" class="nav-link">Add On</a>
                                 </li>
-                                <ul id="addon" class="collapse list-unstyled">
-                                    <li class="border-0">
-                                        <a href="{{route('cities.index')}}" 
-                                        wire:navigate
-                                        class="nav-link">Cities</a>
-                                    </li>
-                                    <li class="border-0">
-                                        <a href="{{route('countries.index')}}" 
-                                        wire:navigate
-                                        class="nav-link">Countries</a>
-                                    </li>
-                                </ul>
+
+                                    <ul id="addon" class="collapse list-unstyled">
+                                        <li class="border-0">
+                                            <a href="{{route('cities.index')}}" 
+                                            wire:navigate
+                                            class="nav-link">Cities</a>
+                                        </li>
+                                        <li class="border-0">
+                                            <a href="{{route('countries.index')}}" 
+                                            wire:navigate
+                                            class="nav-link">Countries</a>
+                                        </li>
+                                    </ul>
+
                                 <li class="" 
                                 data-bs-toggle="collapse" 
                                 data-bs-target="#fixed">

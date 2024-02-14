@@ -42,4 +42,30 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    public function gender(){
+        return $this -> belongsTo(Gender::class);
+    }
+
+    public function role(){
+        return $this -> belongsTo(Role::class);
+    }
+
+    public function status(){
+        return $this -> belongsTo(Status::class);
+    }
+
+    public function city(){
+        return $this -> belongsTo(City::class);
+    }
+
+    public function country(){
+        return $this -> belongsTo(Country::class);
+    }
+
+    public function image(){
+        return $this -> morphToMany(Image::class,"imageable");
+    }
+
 }

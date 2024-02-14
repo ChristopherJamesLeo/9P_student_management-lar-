@@ -1,0 +1,10 @@
+        Schema::create('reglists', function (Blueprint $table) {
+            $table->id();
+            $table -> string("reg_id");
+            $table -> foreignId("user_id")->constrained(
+                table :"users"
+            )->onUpdate("cascade")->onDelete("cascade");
+            $table->timestamps();
+        });
+
+        

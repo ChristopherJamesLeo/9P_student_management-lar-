@@ -13,6 +13,7 @@ use App\Http\Controllers\StatusController;
 use App\Http\Controllers\StagesController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TypesController;
+use App\Http\Controllers\UsersController;
 
 
 Route::get('/', function () {
@@ -57,6 +58,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('types',TypesController::class);
     Route::get('/typestatus',[TypesController::class,"typestatus"]);
+
+    Route::resource('users',UsersController::class);
+    Route::get('/userstatus',[UsersController::class,"userstatus"]);
 
 
 });

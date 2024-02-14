@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\User;
+use App\Models\Registration;
+
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -36,11 +39,21 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+
+        $user = new User();
+        $user -> name = $request->name;
+        $user -> email = $request->email;
+        $user -> password = Hash::make($request->password);
+
+        $user -> save();
+
+        $reglist = new Registration();
+
+        $reglist -> reg_no = "BID_".$user->id;
+        $reglist -> registrable_id = $user->id;
+        $reglist -> registrable_type = "App\Models\User";
+
+        $reglist->save();
 
         event(new Registered($user));
 
