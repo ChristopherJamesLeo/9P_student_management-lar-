@@ -40,7 +40,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('days',DaysController::class);
     Route::get('/daystatus',[DaysController::class,"daystatus"]);
 
-
     Route::resource('enrolls',EnrollsController::class);
 
     Route::resource('genders',GendersController::class);

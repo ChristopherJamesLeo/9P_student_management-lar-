@@ -76,7 +76,7 @@
     <div class="row">
         <div>
             <div class="d-flex gap-2">
-                <a href="{{route('posts.index')}}" wire:navigate class="btn btn-primary rounded-0">Back</a>
+                <a href="javascript:void(0)" class="btn btn-primary rounded-0 back_btn">Back</a>
             
                 @if (!$post->checkenroll(Auth::user()->id))
                     {{-- start enroll --}}
@@ -332,6 +332,10 @@
 @section("script")
 
 <script>
+
+    document.querySelector(".back_btn").addEventListener("click",function(){
+        window.history.back();
+    })
     $(document).ready(function(){
         $(".confirm_email").click(function(){
             let getId = $(".delete_btn").data("id");;

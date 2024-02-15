@@ -128,7 +128,7 @@ class PostsController extends Controller
 
         $data["gettoday"] = Carbon::today()->format("Y-m-d");
 
-        $data["enrolls"] = Enroll::where("post_id",$id)->orderBy("id","desc")->get();
+        $data["enrolls"] = Enroll::where("post_id",$id)->orderBy("updated_at","desc")->get();
 
         return view("posts.show",$data);
     }

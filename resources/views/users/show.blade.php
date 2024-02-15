@@ -31,7 +31,7 @@
     {{-- start create status --}}
     <div class="row">
         <div>
-            <a href="{{route('users.index')}}" wire:navigate class="btn btn-primary rounded-0">Back</a>
+            <a href="javascript:void(0)" class="btn btn-primary rounded-0 back_btn">Back</a>
             <hr>
             <div class="mt-3 row">
                 <div class="col-md-4 col-sm-12 mb-3">
@@ -170,6 +170,10 @@
 @section("script")
 
 <script>
+
+    document.querySelector(".back_btn").addEventListener("click",function(){
+        window.history.back();
+    })
     $(document).ready(function(){
 
 

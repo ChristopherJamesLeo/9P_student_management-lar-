@@ -27,6 +27,10 @@ class Enroll extends Model
     public function user(){
         return $this -> belongsTo(User::class);
     }
+
+    public function admit(){
+        return $this -> belongsTo(User::class,"admit_by","id");
+    }
     
     public function post(){
         return $this -> belongsTo(Post::class);
@@ -39,6 +43,8 @@ class Enroll extends Model
     public function postid(){
         return $this -> post ->id;
     }
+
+
 
     public function stage(){
         return $this -> belongsTo(Stage::class,"stage_id","id");

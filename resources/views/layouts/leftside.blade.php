@@ -10,9 +10,18 @@
                                     <a href="{{route('dashboard')}}" wire:navigate class="nav-link ">Home</a>
                                 </li>
 
-                                <li class="">
-                                    <a href="{{route('posts.index')}}" wire:navigate class="nav-link ">Post</a>
+                                <li class="" data-bs-toggle="collapse" data-bs-target="#post">
+                                    <a href="javascript:void(0)" class="nav-link">Post</a>
                                 </li>
+
+                                <ul id="post" class="collapse list-unstyled">
+                                    <li class="border-0">
+                                        <a href="{{route('posts.index')}}" wire:navigate class="nav-link ">Post</a>
+                                    </li>
+                                    <li class="border-0">
+                                        <a href="{{route('enrolls.index')}}" wire:navigate class="nav-link ">Enrolls</a>
+                                    </li>
+                                </ul>
 
                                 <li class="">
                                     <a href="{{route('users.index')}}" wire:navigate class="nav-link ">User</a>

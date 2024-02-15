@@ -11,6 +11,7 @@ return new class extends Migration
     {
         Schema::table('enrolls', function (Blueprint $table) {
             $table -> string("image")->after("id");
+            $table -> unsignedBigInteger("admit_by")->after("user_id")->nullable();
         });
     }
 
@@ -19,6 +20,7 @@ return new class extends Migration
     {
         Schema::table('enrolls', function (Blueprint $table) {
             $table -> dropColumn("image");
+            $table -> dropColumn("admit_by");
         });
     }
 };
