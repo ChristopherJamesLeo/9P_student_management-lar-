@@ -29,10 +29,32 @@ class EnrollsController extends Controller
 
     public function store(Request $request)
     {
+        $this -> validate($request,[
+            "image" => "required|image|mimes:jpg,jpeg,png|max:3072"
+        ]);
+
         $enroll = new Enroll();
         $enroll -> post_id = $request["post_id"];
         $enroll -> user_id = Auth::user()->id;
-        $enroll -> stage_id = 2;
+        $enroll -> stage_id = $request["stage_id"];
+
+        // dd($request["image"]);
+
+        if(file_exists($request["image"])){
+
+            $file = $request->file("image");
+
+            $fname = $file->getClientOriginalName();
+
+            $newfilename = uniqid().time().$fname;
+
+            $file -> move(public_path("assets/imgs/enrolls/"),$newfilename);
+
+            $filepath = "assets/imgs/enrolls/".$newfilename;
+
+            $enroll -> image = $filepath;
+        }
+        
         $enroll -> save();
 
         $user = Auth::user();
@@ -44,12 +66,14 @@ class EnrollsController extends Controller
             "name" => $enroll->postname(),
             "stage" => $enroll -> stagename(),
             "url" => url("posts/".$post_id)
+
         ];
 
 
         Notification::send($user, new EnrollEmailNotify($emailnotidata));
 
         session()->flash("success","Enroll Successful");
+
         return redirect()->back();
     }
 

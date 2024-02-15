@@ -18,6 +18,7 @@ class Enroll extends Model
     protected $primaryKey ="id";
 
     protected $fillable = [
+        "image",
         "post_id",
         "stage_id",
         "user_id"

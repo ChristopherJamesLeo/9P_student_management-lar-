@@ -25,6 +25,50 @@
         border: none;
         padding: 20px 10px 10px 10px;
     }
+    .post_enroll_list_container {
+        margin: 20px 0px;
+        padding: 10px;
+        border: 1px solid #f4f4f4;
+        max-height: 400px;
+        overflow: scroll;
+    }
+
+    .post_enroll_list_container ul li{
+        padding: 10px;
+        font-size: 14px;
+        border-bottom: 1px solid #f4f4f4;
+    }
+    label[for="coverphotos"]{
+        display: block;
+        margin-bottom: 10px;
+    }
+    label {
+        font-size: 14px;
+    }
+
+
+    .gallery {
+        width: 100%;
+        background-color: #eee;
+        color: #aaa;
+        display: flex;
+        justify-content: center;
+    }
+    .gallery img {
+        display: none;
+        width: 200px;
+        height: auto;
+
+
+        border: 2px solid #aaa;
+        border-radius: 0px;
+        object-fit: cover;
+        padding: 2px;
+        /* margin: 0 5px; */
+    }
+    .gallery.removetxt span{
+        display: none;
+    }
 </style>
 @endsection
 @section('content_area')
@@ -44,11 +88,11 @@
                     {{-- end enroll --}}
                 @endif
 
-                <form action="{{route('enrolls.store')}}" method="POST" id="enroll_form">
+                {{-- <form action="{{route('enrolls.store')}}" method="POST" id="enroll_form">
                     @csrf
                     @method("POST")
                     <input type="hidden" name="post_id" value="{{$post->id}}">
-                </form>
+                </form> --}}
 
                 {{-- start model --}}
                 <div id="confirm_box"  class="modal fade" >
@@ -59,16 +103,38 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
-                                <form id="confirm_enroll" method="POST">
-                                    <input type="hidden" name="" id="" class="user_email_box" value="{{$post->user->email}}">
+                                <form action="{{route('enrolls.store')}}" id="confirm_enroll" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    @method("POST")
+                                    {{-- hidden Area --}}
+                                    <input type="hidden" name="post_id" value="{{$post->id}}">
+                                    <input type="hidden" name="stage_id" value="2">
+                                    {{-- end hidden area --}}
+                                    <input type="hidden" name="" id="" class="user_email_box" value="{{Auth::user()->email}}">
                                     <div class="row">
                                        
                                         <div class="col-12 mb-3 form-group">
                                             <input type="text" name="name" id="" class="form-control rounded-0 outline-none shadow-none border" placeholder="" value="{{$post->name}}" readonly >
                                         </div>
+                                        {{-- image upload --}}
+                                        <div class="form-group mb-2">
+                                            {{-- hidden area --}}
+                                            <input type="file" name="image" id="coverphotos" class="form-control rounded-0 shadow-none outline-none "/>
+                                            {{-- end hidden area --}}
+                                            
+                                        </div>
+                                        
+                                        <label for="coverphotos">
+                                            <div class="gallery">
+                                                <img src="" alt="">
+                                                <span>Choose Images</span>
+                                            </div>
+                                        </label>
+                                        {{-- end image upload --}}
                                         <div class="col-12 mb-3 form-group">
                                             <input type="email" class="form-control rounded-0 outline-none shadow-none border confirm_enroll_box" placeholder="Confirm Your Email" value="">
                                         </div>
+                                        
                                         <div class="col-12 mb-3">
                                             <div class="d-flex justify-content-end">
                                                 <button type="button" class="btn btn-primary rounded-0 outline-none shadow-none confirm_enroll">Submit</button>
@@ -197,6 +263,26 @@
                             {{$post->content}}
                         </p>
                     </div>
+                    <span class="" style="font-size: 15px">Enroll Total - {{count($enrolls)}} </span>
+                    <div class="post_enroll_list_container">
+                        <ul class="list-unstyled">
+                            @foreach ($enrolls as $enroll)
+                                <li class="d-flex justify-content-between">
+                                    <span>
+                                        <a href="{{route('users.show',$enroll->user->id)}}"
+                                            wire:navigate>
+                                            <small>{{$enroll->user->name}}</small>
+                                        </a>
+                                    </span> 
+
+                                    <small>{{$enroll->stage->name}}</small>
+                                    
+                                    <span>{{$enroll->updated_at->diffForHumans()}}</span>
+                                </li>
+                            @endforeach
+                           
+                        </ul>
+                    </div>
                     <div class="comment_box">
                         @livewire('post.comment',["post_id"=>$post->id])
                     </div>
@@ -247,8 +333,6 @@
 
 <script>
     $(document).ready(function(){
-
-
         $(".confirm_email").click(function(){
             let getId = $(".delete_btn").data("id");;
             let getUserEmail = $(".delete_btn").data("email");
@@ -268,10 +352,25 @@
 
             // console.log(getUserEmail,getEmail);
             if(getUserEmail === getEmail){
-                $(`#enroll_form`).submit();
+                $(`#confirm_enroll`).submit();
             }else{
                 window.alert("Permission Denied");
             }
+        })
+
+
+        // show image
+        let getprofileinputbox = document.querySelector("#coverphotos");
+        let getshowimg = document.querySelector(".gallery img");
+        let getimgtitle = document.querySelector(".gallery span");
+        getprofileinputbox.addEventListener("change",function(){
+            var reader = new FileReader();
+            reader.onload = function(e){
+                getshowimg.style.display="block";
+                getimgtitle.style.display = "none";
+                getshowimg.setAttribute("src",e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]);
         })
 
     })

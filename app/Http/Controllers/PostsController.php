@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 
 use App\Models\Post;
 use App\Models\Comment;
+use App\Models\Enroll;
 use App\Models\Status;
 use App\Models\Tag;
 use App\Models\Type;
@@ -23,6 +24,7 @@ class PostsController extends Controller
     public function index()
     {
         $data['posts'] = Post::paginate(4);
+        
         return view("posts.index",$data);
     }
 
@@ -125,6 +127,8 @@ class PostsController extends Controller
         $data["statuses"] = Status::whereIn("id",["7","8","11"])->pluck("name","id");
 
         $data["gettoday"] = Carbon::today()->format("Y-m-d");
+
+        $data["enrolls"] = Enroll::where("post_id",$id)->orderBy("id","desc")->get();
 
         return view("posts.show",$data);
     }
