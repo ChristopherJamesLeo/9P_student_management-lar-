@@ -4,12 +4,26 @@
     {{-- start create status --}}
     <div class="row">
         <div>
-            <form action="{{route('cities.store')}}" method="POST">
+            <form action="{{route('attendances.store')}}" method="POST">
                 @csrf
                 @method("POST")
-                <div class="mb-2 form-group">
-                    <input type="text" name="name" id="name" class="form-control rounded-0 border outline-none shadow-none" placeholder="City" value="{{old('name')}}">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12 mb-2 form-group">
+                        <input type="text" name="name" id="name" class="form-control rounded-0 border outline-none shadow-none" placeholder="Att Code" value="{{old('name')}}">
+                    </div>
+                    <div class="col-md-4 col-sm-12 mb-2 form-group">
+                        <input type="date" name="classdate" id="classdate" class="form-control rounded-0 border outline-none shadow-none" placeholder="Att Code" value="{{old('classdate')}}">
+                    </div>
+                    <div class="col-md-4 col-sm-12 mb-2 form-group">
+                        <select name="post_id" id="post_id" class="form-select rounded-0 outline-none shadow-none">
+                            <option value="" selected disabled>Select Class</option>
+                            @foreach ($posts as $idx => $post)
+                                <option value="{{$idx}}">{{$post}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
+                
                 <div class="d-flex gap-2 justify-content-end">
                     <button type="reset" class="btn btn-secondary rounded-0">Cancel</button>
                     <button type="submit" class="btn btn-primary rounded-0">Submit</button>
@@ -24,46 +38,43 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
+                                    <th>Att Code</th>
                                     <th>Name</th>
-                                    <th>Status</th>
-                                    <th>By</th>
+                                    <th>Classdate</th>
+                                    <th>Post</th>
                                     <th>Created At</th>
                                     <th>Updated At</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($cities as $idx => $city)
+                                @foreach ($attendances as $idx => $attendance)
                                     <tr>
                                         {{-- <td>{{$idx + $statuses -> firstItem()}}</td> --}}
-                                        <td>{{$idx + $cities -> firstItem()}}</td>
-                                        <td>{{$city->name}}</td>
-                                        <td>
-                                            <div class="form-checkbox form-switch">
-                                                <input type="checkbox" name="" id="" 
-                                                {{$city->status_id == 3 ? "checked" : " "}} 
-                                                data-id = {{$city->id}} 
-                                                class="form-check-input shadow-none outline-none change-btn" >
-                                            </div>
-                                        </td>
-                                        <td>{{$city->user["name"]}}</td>
-                                        <td>{{$city->created_at -> format("d M y")}}</td>
-                                        <td>{{$city->updated_at -> format("d M y")}}</td>
+                                        <td>{{$idx + $attendances -> firstItem()}}</td>
+                                        <td>{{$attendance->name}}</td>
+
+                                        <td>{{$attendance->user["name"]}}</td>
+                                        <td>{{date('d M y',strToTime($attendance->classdate))}}</td>
+                                        <td>{{$attendance->post["name"]}}</td>
+
+                                        <td>{{$attendance->created_at -> format("d M y")}}</td>
+                                        <td>{{$attendance->updated_at -> format("d M y")}}</td>
                                         <td>
                                             <div class="d-flex gap-2">
                                                 <a href="javascript:void(0)"
-                                                data-id = "{{$city->id}}"
-                                                data-name = "{{$city->name}}"
-                                                data-status-id = "{{$city->status_id}}"
+                                                data-id = "{{$attendance->id}}"
+                                                data-name = "{{$attendance->name}}"
+                                                data-post-id = "{{$attendance->post_id}}"
                                                 data-bs-toggle = "modal"
                                                 data-bs-target = "#editmodal"
                                                  class="btn btn-outline-primary btn-sm edit_form_btn"><i class="fas fa-edit"></i></a>
                                                 <a href="javascript:void(0)" 
-                                                data-id={{$city->id}} 
+                                                data-id={{$attendance->id}} 
                                                 class="btn btn-danger btn-sm delete_btn" ><i class="fas fa-trash"></i></a>
                                             </div>
                                         </td>
-                                        <form id="formdelete{{$city->id}}" action="{{route('cities.destroy',$city->id)}}" method="POST">
+                                        <form id="formdelete{{$attendance->id}}" action="{{route('attendances.destroy',$attendance->id)}}" method="POST">
                                             {{ csrf_field() }}
                                             {{ method_field('DELETE') }}
                                         </form>
@@ -72,7 +83,7 @@
                 
                             </tbody>
                         </table>
-                        {{ $cities->links("pagination::bootstrap-4") }}
+                        {{ $attendances->links("pagination::bootstrap-4") }}
                     </div>
                 </div>
 
@@ -91,12 +102,13 @@
         
                                     <div class="row">
                                         <div class="col-12 mb-3 form-group">
-                                            <input type="text" name="name" id="editname" class="form-control rounded-0 outline-none shadow-none border" placeholder="Enter Status" value="{{old('name')}}">
+                                            <input type="text" name="name" id="editname" class="form-control rounded-0 outline-none shadow-none border" placeholder="Enter Status" value="{{old('name')}}" readonly>
                                         </div>
+                                        
                                         <div class="col-12 mb-3 form-group">
-                                            <select name="status_id" id="status_id" class="form-select rounded-0 outline-none shadow-none">
-                                                @foreach ($statuses as $idx => $status)
-                                                    <option value="{{$idx}}">{{$status}}</option>
+                                            <select name="post_id" id="editpost_id" class="form-select rounded-0 outline-none shadow-none">
+                                                @foreach ($posts as $idx => $post)
+                                                    <option value="{{$idx}}">{{$post}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -127,15 +139,15 @@
         $(".edit_form_btn").click(function(){
             let getId = $(this).data("id");
             let getName = $(this).data("name");
-            let getStatusId = $(this).data("status-id");
-
-            // console.log(getStatusId);
+            let getPostId = $(this).data("post-id")
+            console.log(getPostId);
 
             $("#editname").val(getName);
 
-            $("#status_id").val($(this).data("status-id"));
+            $("#editpost_id").val($(this).data("post-id"));
 
-            $("#editform").attr("action",`/cities/${getId}`)
+
+            $("#editform").attr("action",`/attendances/${getId}`)
 
             // console.log(getId,getName)
         })
@@ -151,26 +163,6 @@
         })
         // end delete btn
 
-        $(".change-btn").click(function(){
-            var getId = $(this).data("id");
-            let setstatus = $(this).prop("checked") === true ? 3 : 4 ;
-
-            // console.log(status_id);
-
-            $.ajax({
-                url : "citystatus",
-                type : "GET",
-                dataType : "json",
-                data : {
-                    "id" : getId,
-                    "status_id" : setstatus
-                },
-                success : function(response){
-                    console.log(response.success);
-                }
-            });
-
-        })
     })
 </script>
 @endsection

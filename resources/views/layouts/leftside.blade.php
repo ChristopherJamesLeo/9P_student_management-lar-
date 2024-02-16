@@ -22,7 +22,9 @@
                                         <a href="{{route('enrolls.index')}}" wire:navigate class="nav-link ">Enrolls</a>
                                     </li>
                                 </ul>
-
+                                <li class="">
+                                    <a href="{{route('attendances.index')}}" wire:navigate class="nav-link ">Attendance</a>
+                                </li>
                                 <li class="">
                                     <a href="{{route('users.index')}}" wire:navigate class="nav-link ">User</a>
                                 </li>
