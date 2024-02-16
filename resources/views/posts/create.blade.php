@@ -62,6 +62,13 @@
                                 </div>
                             </label>
                             <div class="row">
+                                <div class="col-12 mb-2">
+                                    <div class="form-group">
+                                        <label for="passcode">Passcode</label>
+                                        <input type="text" name="passcode" id="starttime" class="form-control rounded-0 shadow-none outline-none 
+                                        @error('passcode') is-invalid @enderror" value="{{old('passcode')}}" placeholder="Enter Zoom Passcode"  >
+                                    </div>
+                                </div>
                                 <div class="col-6 mb-2">
                                     <div class="form-group">
                                         <label for="starttime">Start Time</label>

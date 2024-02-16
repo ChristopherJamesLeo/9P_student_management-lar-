@@ -23,6 +23,8 @@ class Post extends Model
 
     protected $fillable = [
         "name",
+        "zoomid",
+        "passcode",
         "startdate",
         "enddate",
         "starttime",

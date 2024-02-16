@@ -3,14 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\User;
+use App\Models\Enroll;
+
+use App\Jobs\StudentEmailJob;
 
 class UsersController extends Controller
 {
 
     public function index()
     {
-        $data["users"] = User::paginate(3);
+        $data["users"] = User::paginate(20);
 
         return view("users.index",$data);
     }
@@ -31,6 +36,8 @@ class UsersController extends Controller
     public function show(string $id)
     {
         $data["user"] = User::findOrFail($id);
+
+        $data["enrolls"] = Enroll::where("user_id",$id)->orderBy("updated_at","desc")->get();
 
         // dd($data["user"]);
 
@@ -54,4 +61,35 @@ class UsersController extends Controller
     {
         //
     }
+
+
+    // email send 
+    public function usersendemail(Request $request){
+        $user = User::findOrFail($request["user_id"]);
+
+        $username = $user -> name;
+
+        $comemail = $request["comemail"];
+
+        $comsubject = $request["comsubject"];
+
+        $comcontent = $request["comcontent"];
+
+        $data = [
+            "to" => $comemail,
+            "subject" => $comsubject,
+            "username" => $username,
+            "content" => $comcontent,
+            "sendby" => Auth::user()->name
+        ];
+
+        // dd($data);
+
+        dispatch(new StudentEmailJob($data));
+
+        session()->flash("success","Email Send Successful");
+
+        return redirect()->back();
+    }
+
 }

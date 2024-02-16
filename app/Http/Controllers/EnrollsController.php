@@ -10,8 +10,13 @@ use App\Models\Stage;
 use App\Models\Post;
 
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Mail;
 
 use App\Notifications\EnrollEmailNotify; 
+
+use App\Jobs\EnrollMailJob;
+
+use App\Mail\EnrollMailBox; 
 
 class EnrollsController extends Controller
 {
@@ -103,6 +108,24 @@ class EnrollsController extends Controller
         $enroll -> admit_by = Auth::user()->id;
 
         $enroll -> save();
+
+        $data = [
+            "to" => $enroll->user->email,
+            "subject" => $enroll-> post -> name ,
+            "starttime" => $enroll->post->starttime,
+            "endtime" => $enroll->post->endtime,
+            "startdate" => $enroll->post->startdate,
+            "enddate" => $enroll->post->enddate,
+            "username" => $enroll -> user -> name,
+            "stage" => $enroll -> stage -> name,
+            "stage_id" => $enroll -> stage -> id,
+            "admit_by" => $enroll -> admit -> name,
+            "zoomid" => $enroll -> post -> zoomid,
+            "passcode" => $enroll -> post -> passcode
+
+        ];
+
+        dispatch(new EnrollMailJob($data));
 
         session()->flash("success","Enroll " . $enroll -> stage -> name . " Successful");
 

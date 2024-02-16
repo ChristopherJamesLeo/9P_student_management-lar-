@@ -64,6 +64,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('users',UsersController::class);
     Route::get('/userstatus',[UsersController::class,"userstatus"]);
+    Route::post('/usersendemail',[UsersController::class,"usersendemail"])->name('user.sendemail');
 
 
 });

@@ -47,6 +47,7 @@ class PostsController extends Controller
         $this -> validate($request,[
             "image" => "image|mimes:jpg,jpeg,png|max:3072",
             "name" => "required",
+            "passcode" => "required|unique:posts,passcode",
             "startdate" => "required",
             "enddate" => "required",
             "starttime" => "required",
@@ -57,6 +58,7 @@ class PostsController extends Controller
         $userId = Auth::user()->id;
         $post = new Post();
         $post -> name = $request["name"];
+        $post -> passcode = $request["passcode"];
         $post -> startdate = $request["startdate"];
         $post -> enddate = $request["enddate"];
         $post -> starttime = $request["starttime"];
@@ -161,6 +163,7 @@ class PostsController extends Controller
         $this -> validate($request,[
             "image" => "required|image|mimes:jpg,jpeg,png,jpg.webp|max:3072",
             "name" => "required",
+            "passcode" => "required|unique:posts,passcode,".$id,
             "startdate" => "required",
             "enddate" => "required",
             "starttime" => "required",
@@ -181,6 +184,7 @@ class PostsController extends Controller
         $userId = Auth::user()->id;
 
         $post -> name = $request["name"];
+        $post -> passcode = $request["passcode"];
         $post -> startdate = $request["startdate"];
         $post -> enddate = $request["enddate"];
         $post -> starttime = $request["starttime"];

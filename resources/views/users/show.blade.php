@@ -25,6 +25,16 @@
         border: none;
         padding: 20px 10px 10px 10px;
     }
+    .enroll_container {
+        font-size: 14px;
+    }
+    .enroll_container:hover {
+        border-color : rgba(0, 0, 255, 0.54) !important;
+    }
+
+    .contact_email_form .form-control,.contact_email_form .form-control::placeholder {
+        font-size: 14px;
+    }
 </style>
 @endsection
 @section('content_area')
@@ -122,7 +132,43 @@
 
                 <div class="col-md-8 col-sm-12">
                     <div class="mb-5">
-                       
+                        {{-- start email contact form --}}
+                        <form action="{{route('user.sendemail',$user->id)}}" method="POST" class="contact_email_form">
+                            @csrf
+                            @method("POST")
+                            <div class="row">
+                                <h6>Send Email</h6>
+                                <input type="hidden" name="user_id" value="{{$user->id}}">
+                                <div class="col-md-6 col-sm-12 mb-2 form-group">
+                                    <input type="text" name="comemail" id="comemail" class="form-control rounded-0 outline-none shadow-none" placeholder="Enter Email Address" value="{{old('comemail',$user->email)}}" readonly>
+                                </div>
+                                <div class="col-md-6 col-sm-12 mb-2 form-group">
+                                    <input type="text" name="comsubject" id="comsubject" class="form-control rounded-0 outline-none shadow-none" placeholder="Enter Subject" value="{{old('comsubject')}}">
+                                </div>
+                                <div class="col-md-12 col-sm-12 mb-2 form-group">
+                                    <textarea type="text" name="comcontent" id="comcontent" rows="5" class="form-control rounded-0 outline-none shadow-none" placeholder="Enter Subject">{{old('comcontent')}}</textarea>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary rounded-0">Send</button>
+                                </div>
+
+                            </div>
+                        </form>
+                        {{-- end email contact form --}}
+                        <hr>
+                        <h6 class="mt-2">Enrolls</h6>
+                        <div class="row">
+                            @foreach ($enrolls as $enroll)
+                                <div class="col-md-4 col-sm-6 mb-2">
+                                    <div class="p-2 border d-flex flex-column gap-2 enroll_container">
+                                        <span><a href="{{route('posts.show',$enroll->post->id)}}" wire:navigate>{{$enroll->post->name}}</a></span>
+                                        <span>{{$enroll->stage->name}}</span>
+                                        <span>{{$enroll->updated_at->diffForHumans()}}</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                            
+                        </div>
                     </div>
 
                     

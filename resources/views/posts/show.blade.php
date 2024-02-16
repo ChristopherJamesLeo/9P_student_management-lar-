@@ -160,6 +160,7 @@
                                 <span class="d-block text-start fw-bold" style="font-size: 13px">Attended Show</span>
                                 <span class="d-block text-start" style="font-size: 13px">{{$post->attstatus->name}}</span>
                             </div>
+                            
                             <div>
                                 <span class="d-block text-end fw-bold" style="font-size: 13px">Status</span>
                                 <span class="d-block text-end" style="font-size: 13px">{{$post->status->name}}</span>
@@ -176,6 +177,14 @@
                                 <li class=" d-flex justify-content-between">
                                     <span>Authorized By</span>
                                     <span>{{$post->user->name}}</span>
+                                </li>
+                                <li class=" d-flex justify-content-between">
+                                    <span>Zoom Id</span>
+                                    <span>{{$post->zoomid}}</span>
+                                </li>
+                                <li class=" d-flex justify-content-between">
+                                    <span>Pass Code</span>
+                                    <span>{{$post->passcode}}</span>
                                 </li>
                                 <li class="  d-flex justify-content-between">
                                     <span>Fee</span>
