@@ -27,8 +27,8 @@ class Leave extends Model
         return $this -> belongsTo(User::class);
     }
 
-    public function admit(){
-        return $this -> belongsTo(User::class,"admit_by","id");
+    public function admin(){
+        return $this -> belongsTo(User::class,"admin_id","id");
     }
     
     public function stage(){

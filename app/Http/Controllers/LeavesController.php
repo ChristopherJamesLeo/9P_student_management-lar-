@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+
 use App\Models\Leave;
 use App\Models\Enroll;
 use App\Models\Stage;
+
 use App\Models\Post;
 
 class LeavesController extends Controller
@@ -30,7 +33,8 @@ class LeavesController extends Controller
     public function store(Request $request)
     {
         $this -> validate($request,[
-            "image" => "image|mimes:jpg,jpeg,png|max:3072"
+            "image" => "image|mimes:jpg,jpeg,png|max:3072",
+            "message" => "required"
         ]);
 
 
@@ -38,6 +42,7 @@ class LeavesController extends Controller
         $leave -> post_id = $request["post_id"];
         $leave -> startdate = $request["startdate"];
         $leave -> enddate = $request["enddate"];
+        $leave -> message = $request["message"];
         $leave -> user_id = Auth::user()->id;
         $leave -> admin_id = $request["admin_id"];
 
@@ -79,35 +84,16 @@ class LeavesController extends Controller
 
     public function update(Request $request, string $id)
     {
-        // dd($request["stage_id"]);
 
-        $enroll = Enroll::findOrFail($id);
+        $leave = Leave::findOrFail($id);
 
-        $enroll -> stage_id = $request["stage_id"];
+        $leave -> stage_id = $request["stage_id"];
 
-        $enroll -> admit_by = Auth::user()->id;
+        $leave -> admin_id = Auth::user()->id;
 
-        $enroll -> save();
+        $leave -> save();
 
-        $data = [
-            "to" => $enroll->user->email,
-            "subject" => $enroll-> post -> name ,
-            "starttime" => $enroll->post->starttime,
-            "endtime" => $enroll->post->endtime,
-            "startdate" => $enroll->post->startdate,
-            "enddate" => $enroll->post->enddate,
-            "username" => $enroll -> user -> name,
-            "stage" => $enroll -> stage -> name,
-            "stage_id" => $enroll -> stage -> id,
-            "admit_by" => $enroll -> admit -> name,
-            "zoomid" => $enroll -> post -> zoomid,
-            "passcode" => $enroll -> post -> passcode
-
-        ];
-
-        dispatch(new EnrollMailJob($data));
-
-        session()->flash("success","Enroll " . $enroll -> stage -> name . " Successful");
+        session()->flash("success","Enroll " . $leave -> stage -> name . " Successful");
 
         return redirect()->back();
     }
@@ -115,20 +101,20 @@ class LeavesController extends Controller
 
     public function destroy(string $id)
     {
-        // $enroll = Enroll::findOrFail($id);
+        $leave = Leave::findOrFail($id);
 
-        // // dd($enroll);
+        // dd($leave);
 
-        // $file = $enroll->image;
+        $file = $leave->image;
 
-        // if(File::exists($file)){
-        //     File::delete($file);
-        // }
+        if(File::exists($file)){
+            File::delete($file);
+        }
 
-        // $enroll->delete();
+        $leave->delete();
         
-        // session()->flash("success","Enroll Delete Successful");
+        session()->flash("success","Enroll Delete Successful");
 
-        // return redirect()->back();
+        return redirect()->back();
     }
 }

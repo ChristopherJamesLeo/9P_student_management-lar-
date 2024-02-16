@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 
 use App\Models\User;
 use App\Models\Enroll;
+use App\Models\Leave;
 
 
 
@@ -43,6 +44,8 @@ class UsersController extends Controller
         $data["enrolls"] = Enroll::where("user_id",$id)->orderBy("updated_at","desc")->get();
 
         $data["posts"] = Enroll::where("user_id",Auth::user()->id)->where("stage_id",1)->get();
+
+        $data["leaves"] = Leave::where("user_id",$id)->orderby("created_at","desc")->get();
 
         $data["today"] = Carbon::today()->format("Y-m-d");
 

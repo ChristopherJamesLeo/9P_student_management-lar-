@@ -2,6 +2,12 @@
 
 @section("style")
 <style>
+
+    .leave_table_container {
+        width: 100%;
+        max-height: 200px;
+        overflow-y: scroll;
+    }
     label[for="coverphotos"]{
         display: block;
         margin-bottom: 10px;
@@ -159,15 +165,50 @@
 
                 <div class="col-md-8 col-sm-12">
                     <div class="mb-5">
-
+                        @if (count($leaves) > 0)
+                            
+                            <div class="mb-3 border p-2 leave_container">
+                                <h5 style="font-size: 16px">Leave Record</h5>
+                                <span class="d-block text-end" style="font-size: 12px;">Total Leave - {{count($leaves)}}</span>
+                                <div class="leave_table_container">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Start Date</th>
+                                                <th>End Date</th>
+                                                <th>Stage</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($leaves as $leave)
+                                                <tr>
+                                                    <td>
+                                                        {{date("d M Y",strToTime($leave->startdate))}}
+                                                    </td>
+                                                    <td>
+                                                        {{date("d M Y",strToTime($leave->enddate))}}
+                                                    </td>
+                                                    <td>{{$leave->stage->name}}</td>
+                                                </tr>
+                                            @endforeach
+                                            
+                                        </tbody>
+                                    </table>
+    
+                                </div>
+                                
+                                
+                            </div>
+                        
+                        @endif
                         {{-- start leave button --}}
                         @if ($user->role_id == 1 || $user->role_id == 2)
-                            
+                                    
                             <div class="mb-3 d-grid">
                                 <button type="button"
                                 data-bs-toggle="modal"
                                 data-bs-target="#leave_model"
-                                 class="btn btn-primary rounded-0 shadow-none border-none outline-none">Leave</button>
+                                class="btn btn-primary rounded-0 shadow-none border-none outline-none">Leave</button>
                             </div>
 
                             {{-- start leave model --}}
@@ -176,6 +217,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h6>Leave Form</h6>
+                                            
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body">
@@ -198,26 +240,30 @@
                                                     <div class="col-md-6 col-sm-12">
                                                         <div class="row">
                                                             <input type="hidden" name="admin_id" value="{{$user->id}}">
-                                                            <div class="col-12 mb-3 form-group">
+                                                            <div class="col-12 mb-2 form-group">
                                                                 <label for="">To</label>
                                                                 <input type="text" name="" id="" class="form-control rounded-0 outline-none shadow-none" value="{{$user->name}}" readonly>
                                                             </div>
-                                                            <div class="col-12 mb-3 form-group">
+                                                            <div class="col-12 mb-2 form-group">
                                                                 <label for="startdate">Start Date</label>
                                                                 <input type="date" name="startdate" id="startdate" class="form-control rounded-0 outline-none shadow-none" value="{{$today}}">
                                                             </div>
-                                                            <div class="col-12 mb-3 form-group">
+                                                            <div class="col-12 mb-2 form-group">
                                                                 <label for="enddate">End Date</label>
                                                                 <input type="date" name="enddate" id="enddate" class="form-control rounded-0 outline-none shadow-none" value="{{$today}}">
                                                             </div>
-                                                            <div class="col-12 mb-3 form-group">
+                                                            <div class="col-12 mb-2 form-group">
                                                                 <label for="post_id">Class</label>
                                                                 <select name="post_id" id="post_id" class="form-control rounded-0 outline-none shadow-none">
                                                                     <option value="" selected disabled>Choos Class</option>
                                                                     @foreach ($posts as $post)
-                                                                        <option value="{{$post->id}}">{{$post->post->name}}</option>
+                                                                        <option value="{{$post->post_id}}">{{$post->post->name}}</option>
                                                                     @endforeach
                                                                 </select>
+                                                            </div>
+                                                            <div class="col-12 mb-2 form-group">
+                                                                <label for="message">Message</label>
+                                                                <textarea  name="message" id="message" class="form-control rounded-0 outline-none shadow-none" >{{old("message")}}</textarea>
                                                             </div>
                                                             {{-- user email hidden --}}
                                                             <input type="hidden" name="" id="user_email" value="{{Auth::user()->email}}">

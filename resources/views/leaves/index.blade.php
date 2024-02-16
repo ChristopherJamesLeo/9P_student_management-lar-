@@ -27,6 +27,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($leaves as $idx => $leave)
+                                {{-- {{$leave->post->name}} --}}
                                     <tr>
                                         <td>{{$idx + $leaves -> firstItem()}}</td>
                                         <td class="invoice_img">
@@ -45,13 +46,19 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="{{route("posts.show",$leave->post->id)}}"
+                                            {{date("d M Y",strToTime($leave->startdate))}}
+                                        </td>
+                                        <td>
+                                            {{date("d M Y",strToTime($leave->enddate))}}
+                                        </td>
+                                        <td>
+                                            <a href="{{route('posts.show',$leave->post->id)}}"
                                                 wire:navigate>
                                                 {{$leave->post->name}}
                                             </a>
                                         </td>
                                         <td>{{$leave->stage->name}}</td>
-                                        <td>{{optional($leave->admit)->name}}</td>
+                                        <td>{{$leave->admin->name}}</td>
                                         
                                         <td>{{$leave->created_at -> format("d M y")}}</td>
                                         <td>{{$leave->updated_at -> format("d M y")}}</td>
@@ -62,20 +69,21 @@
                                                 data-image = "{{$leave->image}}"
                                                 data-post = "{{$leave->post->name}}"
                                                 data-user = "{{$leave->user->name}}"
+                                                data-message = "{{$leave->message}}"
                                                 data-stage-id = "{{$leave->stage->id}}"
                                                 data-bs-toggle = "modal"
                                                 data-bs-target = "#editmodal"
                                                 class="btn btn-outline-primary btn-sm edit_form_btn"><i class="fas fa-edit"></i></a>
 
-                                                {{-- <a href="javascript:void(0)" 
+                                                <a href="javascript:void(0)" 
                                                 data-id={{$leave->id}} 
-                                                class="btn btn-danger btn-sm delete_btn" ><i class="fas fa-trash"></i></a> --}}
+                                                class="btn btn-danger btn-sm delete_btn" ><i class="fas fa-trash"></i></a>
                                             </div>
                                         </td>
-                                        {{-- <form id="formdelete{{$leave->id}}" action="{{route('leaves.destroy',$leave->id)}}" method="POST">
+                                        <form id="formdelete{{$leave->id}}" action="{{route('leaves.destroy',$leave->id)}}" method="POST">
                                             {{ csrf_field() }}
                                             {{ method_field('DELETE') }}
-                                        </form> --}}
+                                        </form>
                                     </tr>
                                 @endforeach
                 
@@ -113,6 +121,9 @@
                                                 </div>
                                                 <div class="col-12 mb-3 form-group">
                                                     <input type="text" name="username" id="username" class="form-control rounded-0 outline-none shadow-none border" readonly>
+                                                </div>
+                                                <div class="col-12 mb-3 form-group">
+                                                    <textarea name="message" id="editmessage" class="form-control rounded-0 outline-none shadow-none border" readonly></textarea>
                                                 </div>
                                                 <div class="col-12 mb-3 form-group">
                                                     <select name="stage_id" id="stage_id" class="form-select rounded-0 outline-none shadow-none">
@@ -160,6 +171,8 @@
 
             let getStatusId = $(this).data("stage-id");
 
+            let getMessage = $(this).data("message");
+
             // console.log(getPost);
 
             $("#postname").val(getPost);
@@ -167,6 +180,8 @@
             $("#username").val(getName);
             
             $("#stage_id").val(getStatusId);
+
+            $("#editmessage").val(getMessage);
 
             $(".show_leave_img_container a").attr("href",getImage);
             $(".show_leave_img_container a").attr("title",getPost);

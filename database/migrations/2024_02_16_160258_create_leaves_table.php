@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string("image")->nullable();
             $table-> date("startdate");
             $table-> date("enddate");
-            $table -> unsignedBigInteger("post_id");
+            $table -> foreignId("post_id")->constrained("posts")->onUpdate("cascade")->onDelete("cascade");
             
             $table -> foreignId("user_id")->constrained("users")->onUpdate("cascade")->onDelete("cascade");
             $table->unsignedBigInteger("stage_id")->default(2);
