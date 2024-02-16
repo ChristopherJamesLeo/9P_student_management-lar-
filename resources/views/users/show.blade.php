@@ -2,6 +2,33 @@
 
 @section("style")
 <style>
+    label[for="coverphotos"]{
+        display: block;
+        margin-bottom: 10px;
+    }
+    label {
+        font-size: 14px;
+    }
+    .gallery {
+        width: 100%;
+        background-color: #eee;
+        color: #aaa;
+        display: flex;
+        justify-content: center;
+    }
+    .gallery img {
+        display: none;
+        width: 200px;
+        height: auto;
+        border: 2px solid #aaa;
+        border-radius: 0px;
+        object-fit: cover;
+        padding: 2px;
+        /* margin: 0 5px; */
+    }
+    .gallery.removetxt span{
+        display: none;
+    }
     .show_detail li{
         padding: 10px 10px;
     }
@@ -132,6 +159,91 @@
 
                 <div class="col-md-8 col-sm-12">
                     <div class="mb-5">
+
+                        {{-- start leave button --}}
+                        @if ($user->role_id == 1 || $user->role_id == 2)
+                            
+                            <div class="mb-3 d-grid">
+                                <button type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#leave_model"
+                                 class="btn btn-primary rounded-0 shadow-none border-none outline-none">Leave</button>
+                            </div>
+
+                            {{-- start leave model --}}
+                            <div id="leave_model" class="modal fade">
+                                <div class="modal-dialog modal-lg modal-dialog-center">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h6>Leave Form</h6>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{route('leaves.store')}}" id="leave_from" method="POST" enctype="multipart/form-data" >
+                                                @csrf 
+                                                @method("POST")
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <div class="form-group mb-2">
+                                                            <input type="file" name="image" id="coverphotos" class="form-control rounded-0 shadow-none outline-none "/>
+                                                            
+                                                        </div>
+                                                        <label for="coverphotos">
+                                                            <div class="gallery">
+                                                                <img src="" alt="">
+                                                                <span>Choose Images</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <div class="row">
+                                                            <input type="hidden" name="admin_id" value="{{$user->id}}">
+                                                            <div class="col-12 mb-3 form-group">
+                                                                <label for="">To</label>
+                                                                <input type="text" name="" id="" class="form-control rounded-0 outline-none shadow-none" value="{{$user->name}}" readonly>
+                                                            </div>
+                                                            <div class="col-12 mb-3 form-group">
+                                                                <label for="startdate">Start Date</label>
+                                                                <input type="date" name="startdate" id="startdate" class="form-control rounded-0 outline-none shadow-none" value="{{$today}}">
+                                                            </div>
+                                                            <div class="col-12 mb-3 form-group">
+                                                                <label for="enddate">End Date</label>
+                                                                <input type="date" name="enddate" id="enddate" class="form-control rounded-0 outline-none shadow-none" value="{{$today}}">
+                                                            </div>
+                                                            <div class="col-12 mb-3 form-group">
+                                                                <label for="post_id">Class</label>
+                                                                <select name="post_id" id="post_id" class="form-control rounded-0 outline-none shadow-none">
+                                                                    <option value="" selected disabled>Choos Class</option>
+                                                                    @foreach ($posts as $post)
+                                                                        <option value="{{$post->id}}">{{$post->post->name}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            {{-- user email hidden --}}
+                                                            <input type="hidden" name="" id="user_email" value="{{Auth::user()->email}}">
+                                                            {{-- user email hidden --}}
+                                                            <div class="col-12 mb-3 form-group">
+                                                                
+                                                                <input type="text" name="" id="confirm_leave_email" class="form-control rounded-0 outline-none shadow-none" placeholder="Confirm Your Email">
+                                                            </div>
+                                                            <div class="col-12 mb-3">
+                                                                <div class="d-flex justify-content-end">
+                                                                    <button type="button" id="leave_submit_btn" class="btn btn-primary rounded-0 outline-none shadow-none">Submit</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- end leave model --}}
+                        @endif
+                        {{-- end leave button --}}
+                        
                         {{-- start email contact form --}}
                         <form action="{{route('user.sendemail',$user->id)}}" method="POST" class="contact_email_form">
                             @csrf
@@ -234,6 +346,34 @@
                 window.alert("Permission Denied");
             }
             
+        })
+
+        $("#leave_submit_btn").click(function(){
+            let getUserEmail = $("#user_email").val();
+            let getEmail = $("#confirm_leave_email").val();
+            
+            console.log(getUserEmail,getEmail);
+
+            if(getUserEmail === getEmail){
+                $(`#leave_from`).submit();
+            }else{
+                window.alert("Permission Denied");
+            }
+            
+        })
+
+        // show image
+        let getprofileinputbox = document.querySelector("#coverphotos");
+        let getshowimg = document.querySelector(".gallery img");
+        let getimgtitle = document.querySelector(".gallery span");
+        getprofileinputbox.addEventListener("change",function(){
+            var reader = new FileReader();
+            reader.onload = function(e){
+                getshowimg.style.display="block";
+                getimgtitle.style.display = "none";
+                getshowimg.setAttribute("src",e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]);
         })
 
     })

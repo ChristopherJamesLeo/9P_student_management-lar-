@@ -9,6 +9,7 @@ use App\Http\Controllers\CountriesController;
 use App\Http\Controllers\DaysController;
 use App\Http\Controllers\EnrollsController;
 use App\Http\Controllers\GendersController;
+use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\StatusController;
@@ -49,6 +50,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('genders',GendersController::class);
     Route::get('/genderstatus',[GendersController::class,"genderstatus"]);
+
+    Route::resource('leaves',LeavesController::class);
 
     Route::resource('posts',PostsController::class);
     Route::get('/poststatus',[PostsController::class,"poststatus"]);

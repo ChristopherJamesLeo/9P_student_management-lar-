@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 
 use App\Models\User;
 use App\Models\Enroll;
+
+
 
 use App\Jobs\StudentEmailJob;
 
@@ -39,7 +42,9 @@ class UsersController extends Controller
 
         $data["enrolls"] = Enroll::where("user_id",$id)->orderBy("updated_at","desc")->get();
 
-        // dd($data["user"]);
+        $data["posts"] = Enroll::where("user_id",Auth::user()->id)->where("stage_id",1)->get();
+
+        $data["today"] = Carbon::today()->format("Y-m-d");
 
         return view("users.show",$data);
     }

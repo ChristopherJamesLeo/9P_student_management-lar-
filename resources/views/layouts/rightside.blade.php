@@ -49,8 +49,10 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="profile_group">
-                                <div class="">
+                            <div class="d-flex profile_group">
+                                <span>{{auth()->user()->name}}</span>
+                                <div class="ms-2">
+                                   
                                     <a href="javascript:void(0)" class="nav-link profile_list" onclick="showProfileSet()">
                                         <img src="{{asset('./assets/imgs/profiles/about.jpg.webp')}}" class="rounded-circle" width="30px" height="30px" alt="">
                                     </a>
