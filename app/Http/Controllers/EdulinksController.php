@@ -9,6 +9,7 @@ use Illuminate\Support\Carbon;
 
 
 use App\Models\Edulink;
+use App\Models\Enroll;
 use App\Models\Status;
 use App\Models\Stage;
 use App\Models\Post;
@@ -19,7 +20,10 @@ class EdulinksController extends Controller
 {
     public function index()
     {
+
         $data["edulinks"] = Edulink::paginate(7);
+
+        $data["enrolls"] = Enroll::where("user_id",Auth::user()->id)->get();
 
         $data["statuses"] = Status::whereIn("id",["7","8"])->get()->pluck("name","id");
 
@@ -27,7 +31,7 @@ class EdulinksController extends Controller
 
         $data["posts"] = Post::all()->pluck("name","id");
 
-        $data["tags"] = Tag::all()->pluck("name","id");
+        $data["tags"] = Tag::where("status_id",["3","4"])->pluck("name","id");
 
         return view("edulinks.index",$data);
     }

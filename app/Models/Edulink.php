@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 class Edulink extends Model
 {
     use HasFactory;
@@ -25,6 +28,10 @@ class Edulink extends Model
 
     public function user(){
         return $this -> belongsTo(User::class);
+    }
+
+    public function enroll(){
+        return $this -> belongsTo(Enroll::class);
     }
     
     public function post(){

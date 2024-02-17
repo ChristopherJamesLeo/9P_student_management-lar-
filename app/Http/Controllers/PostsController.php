@@ -46,7 +46,7 @@ class PostsController extends Controller
         // dd($request["image"]);
         $this -> validate($request,[
             "image" => "image|mimes:jpg,jpeg,png|max:3072",
-            "name" => "required",
+            "name" => "required|unique:posts,name",
             "passcode" => "required|unique:posts,passcode",
             "startdate" => "required",
             "enddate" => "required",
@@ -116,8 +116,8 @@ class PostsController extends Controller
 
     public function show(string $id)
     {
-        $data["post"] = Post::findOrFail($id);
-        
+        $data["post"] = Post::findOrFail($id); 
+
         $data["days"] = Day::where("status_id",3)->get();
 
         $data["types"] = Type::where("status_id",3)->pluck("name","id");
@@ -162,7 +162,7 @@ class PostsController extends Controller
     {
         $this -> validate($request,[
             "image" => "required|image|mimes:jpg,jpeg,png,jpg.webp|max:3072",
-            "name" => "required",
+            "name" => "required|unique:posts,name,".$id,
             "passcode" => "required|unique:posts,passcode,".$id,
             "startdate" => "required",
             "enddate" => "required",

@@ -9,13 +9,22 @@
                     <!-- end aside show hide buttons -->
 
                     <!-- start aside right header -->
-                    <div class="p-2 d-flex justify-content-between align-items-center" style="background-color: var(--bg-color); position: sticky; top:0;">
-                        <form action="">
-                            <div class="ms-5 ms-lg-0 input-group">
-                                <input type="text" name="" id="" class="form-control rounded-0 border-1 outline-none shadow-none" placeholder="Search ...">
-                                <button type="submit" class="btn btn-primary rounded-0"><i class="fas fa-search"></i></button>
-                            </div>
-                        </form>
+                    <div class="p-2 d-flex justify-content-between align-items-center" style="background-color: var(--bg-color); position: sticky; top:0; z-index:100;">
+                        <div class="d-none d-md-block">
+                            <ol class="m-0 p-0 breadcrumb" style="font-size: 14px">
+                                <li class="breadcrumb-item"><a href="{{\Request::root()}}"><i class="fas fa-home"></i></a></li>
+                                <li class="breadcrumb-item">
+                                    <a href="{{url()->previous()}}">{{Str::title(preg_replace('/[[:punct:]]+[[:alnum:]]+/','',str_replace(\Request::root()."/","",url()->previous())))}}</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    {{ucfirst(\Request::path())}}
+                                </li>
+                            </ol>
+
+                        </div>
+                        <div>
+                            <h5 class="m-0 p-0 d-none d-md-block">{{ucfirst(\Request::path())}}</h5>
+                        </div>
                         <div class="d-flex align-items-center gap-4 user_info_group">
                             <div class="noti_group">
                                 <a href="javascript:void(0)" class="nav-link show_noti" onclick="showlist()"><i class="fas fa-bell"></i></a>

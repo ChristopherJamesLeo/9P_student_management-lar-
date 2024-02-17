@@ -82,44 +82,48 @@
                             </thead>
                             <tbody>
                                 @foreach ($edulinks as $idx => $edulink)
-                                    <tr>
-                                        <td>{{$idx + $edulinks -> firstItem()}}</td>
-                                        <td><a href="{{route('posts.show',$edulink->post->id)}}">{{$edulink->post->name}}</a></td>
-                                        <td>{{$edulink->tag->name}}</td>
-                                        <td>{{date("d M y",strToTime($edulink->classdate))}}</td>
-                                        <td>
-                                            <a href="{{$edulink->link}}" target="_blank" title="{{$edulink->link}}">{{Str::limit($edulink->link,20)}}</a>
-                                        </td>
-                                        <td>{{$edulink->status->name}}</td>
-                                        <td>{{$edulink->stage->name}}</td>
-                                        <td>{{$edulink->user->name}}</td>
-                                        <td>{{$edulink->created_at -> format("d M y")}}</td>
-                                        <td>{{$edulink->updated_at -> format("d M y")}}</td>
-                                        <td>
-                                            <div class="d-flex gap-2">
-                                                <a href="javascript:void(0)"
-                                                data-id = "{{$edulink->id}}"
-                                                data-post-id = "{{$edulink->post->id}}"
-                                                data-tag-id = "{{$edulink->tag->id}}"
-                                                data-classdate = "{{$edulink->classdate}}"
-                                                data-link = "{{$edulink->link}}"
-                                                data-stage-id = "{{$edulink->stage->id}}"
-                                                data-status-id = "{{$edulink->status->id}}"
-                                                data-bs-toggle = "modal"
-                                                data-bs-target = "#edit_form"
-                                                class="btn btn-outline-primary btn-sm edit_form_btn"><i class="fas fa-edit"></i>
-                                                </a>
-
-                                                <a href="javascript:void(0)" 
-                                                data-id={{$edulink->id}} 
-                                                class="btn btn-danger btn-sm delete_btn" ><i class="fas fa-trash"></i></a>
-                                            </div>
-                                        </td>
-                                        <form id="formdelete{{$edulink->id}}" action="{{route('edulinks.destroy',$edulink->id)}}" method="POST">
-                                            {{ csrf_field() }}
-                                            {{ method_field('DELETE') }}
-                                        </form>
-                                    </tr>
+                                    @foreach ($enrolls as $enroll)
+                                        @if ($edulink->post_id == $enroll->post_id)
+                                            <tr>
+                                                <td>{{$idx + $edulinks -> firstItem()}}</td>
+                                                <td><a href="{{route('posts.show',$edulink->post->id)}}">{{$edulink->post->name}}</a></td>
+                                                <td>{{$edulink->tag->name}}</td>
+                                                <td>{{date("d M y",strToTime($edulink->classdate))}}</td>
+                                                <td>
+                                                    <a href="{{$edulink->link}}" target="_blank" title="{{$edulink->link}}">{{Str::limit($edulink->link,20)}}</a>
+                                                </td>
+                                                <td>{{$edulink->status->name}}</td>
+                                                <td>{{$edulink->stage->name}}</td>
+                                                <td>{{$edulink->user->name}}</td>
+                                                <td>{{$edulink->created_at -> format("d M y")}}</td>
+                                                <td>{{$edulink->updated_at -> format("d M y")}}</td>
+                                                <td>
+                                                    <div class="d-flex gap-2">
+                                                        <a href="javascript:void(0)"
+                                                        data-id = "{{$edulink->id}}"
+                                                        data-post-id = "{{$edulink->post->id}}"
+                                                        data-tag-id = "{{$edulink->tag->id}}"
+                                                        data-classdate = "{{$edulink->classdate}}"
+                                                        data-link = "{{$edulink->link}}"
+                                                        data-stage-id = "{{$edulink->stage->id}}"
+                                                        data-status-id = "{{$edulink->status->id}}"
+                                                        data-bs-toggle = "modal"
+                                                        data-bs-target = "#edit_form"
+                                                        class="btn btn-outline-primary btn-sm edit_form_btn"><i class="fas fa-edit"></i>
+                                                        </a>
+        
+                                                        <a href="javascript:void(0)" 
+                                                        data-id={{$edulink->id}} 
+                                                        class="btn btn-danger btn-sm delete_btn" ><i class="fas fa-trash"></i></a>
+                                                    </div>
+                                                </td>
+                                                <form id="formdelete{{$edulink->id}}" action="{{route('edulinks.destroy',$edulink->id)}}" method="POST">
+                                                    {{ csrf_field() }}
+                                                    {{ method_field('DELETE') }}
+                                                </form>
+                                            </tr>
+                                        @endif
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>

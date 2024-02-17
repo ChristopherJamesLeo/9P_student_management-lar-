@@ -212,7 +212,7 @@
         <div class="modal-dialog modal-sm modal-dialog-center">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6>Confrim Delete</h6>
+                    <h6>Confirm Edit</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
