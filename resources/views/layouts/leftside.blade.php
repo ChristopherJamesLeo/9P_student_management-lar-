@@ -29,6 +29,9 @@
                                     <a href="{{route('leaves.index')}}" wire:navigate class="nav-link ">Leaves</a>
                                 </li>
                                 <li class="">
+                                    <a href="{{route('edulinks.index')}}" wire:navigate class="nav-link ">Edu Links</a>
+                                </li>
+                                <li class="">
                                     <a href="{{route('users.index')}}" wire:navigate class="nav-link ">User</a>
                                 </li>
 

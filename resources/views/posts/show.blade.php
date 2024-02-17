@@ -368,6 +368,7 @@
                 $(`#confirm_enroll`).submit();
             }else{
                 window.alert("Permission Denied");
+                $(".confirm_enroll_box").focus();
             }
         })
 

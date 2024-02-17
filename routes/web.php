@@ -8,6 +8,7 @@ use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\CountriesController;
 use App\Http\Controllers\DaysController;
 use App\Http\Controllers\EnrollsController;
+use App\Http\Controllers\EdulinksController;
 use App\Http\Controllers\GendersController;
 use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\PostsController;
@@ -47,6 +48,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/daystatus',[DaysController::class,"daystatus"]);
 
     Route::resource('enrolls',EnrollsController::class);
+
+    Route::resource('edulinks',EdulinksController::class);
+    Route::get('/edulinkstatus',[DaysController::class,"edulinkstatus"]);
+
 
     Route::resource('genders',GendersController::class);
     Route::get('/genderstatus',[GendersController::class,"genderstatus"]);
