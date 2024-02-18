@@ -114,9 +114,15 @@ class PostsController extends Controller
     }
 
 
-    public function show(string $id)
+    public function show(string $slug)
     {
-        $data["post"] = Post::findOrFail($id); 
+        // $data["post"] = Post::findOrFail($id); 
+
+        $data["post"] = Post::where("slug",$slug)->firstOrFail();
+
+        $id = $data["post"]->id;
+
+        // dd($id);
 
         $data["days"] = Day::where("status_id",3)->get();
 
@@ -136,9 +142,11 @@ class PostsController extends Controller
     }
 
 
-    public function edit(string $id)
+    public function edit(string $slug)
     {
-        $data["post"] = Post::findOrFail($id);
+        $data["post"] = Post::where("slug",$slug)->firstOrFail();
+
+        $id = $data["post"]->id;
         
         $data["days"] = Day::where("status_id",3)->get();
 

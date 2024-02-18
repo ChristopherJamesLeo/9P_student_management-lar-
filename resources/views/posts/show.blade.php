@@ -246,7 +246,7 @@
                             </ul>
                         </div>
                         <div class="d-flex">
-                            <a href="{{route('posts.edit',$post->id)}}"
+                            <a href="{{route('posts.edit',$post->slug)}}"
                                 wire:navigate 
                                 class="w-100 btn btn-primary rounded-0 shadow-none outline-none">Edit</a>
                             <a href="javascript:void(0)"

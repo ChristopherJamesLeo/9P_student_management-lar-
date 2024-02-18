@@ -33,7 +33,7 @@
                                     <tr>
                                         <td>{{$idx + $users -> firstItem()}}</td>
                                         <td>
-                                            <a href="{{route('users.show',$user->id)}}" 
+                                            <a href="{{route('users.show',$user->slug)}}" 
                                                 wire:navigate
                                                 class="">{{$user->name}}</a>
                                         </td>

@@ -12,6 +12,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
@@ -43,6 +44,7 @@ class RegisteredUserController extends Controller
         $user = new User();
         $user -> name = $request->name;
         $user -> email = $request->email;
+        $user -> slug = Str::slug($request->name);
         $user -> password = Hash::make($request->password);
 
         $user -> save();

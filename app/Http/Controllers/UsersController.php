@@ -37,9 +37,15 @@ class UsersController extends Controller
     }
 
 
-    public function show(string $id)
+    public function show(string $slug)
     {
-        $data["user"] = User::findOrFail($id);
+        // $data["user"] = User::findOrFail($id);
+
+        $data["user"] = User::where("slug",$slug)->firstOrFail();
+
+        // dd($data["user"]);
+
+        $id = $data["user"]->id;
 
         $data["enrolls"] = Enroll::where("user_id",$id)->orderBy("updated_at","desc")->get();
 

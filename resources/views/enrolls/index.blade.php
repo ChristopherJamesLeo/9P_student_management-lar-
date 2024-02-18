@@ -38,13 +38,13 @@
                                             
                                         </td>
                                         <td>
-                                            <a href="{{route('users.show',$enroll->user->id)}}"
+                                            <a href="{{route('users.show',$enroll->user->slug)}}"
                                                 wire:navigate>
                                                 {{$enroll->user->name}}
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="{{route("posts.show",$enroll->post->id)}}"
+                                            <a href="{{route("posts.show",$enroll->post->slug)}}"
                                                 wire:navigate>
                                                 {{$enroll->post->name}}
                                             </a>

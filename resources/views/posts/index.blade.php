@@ -37,7 +37,7 @@
                                     <tr>
                                         <td>{{$idx + $posts -> firstItem()}}</td>
                                         <td>
-                                            <a href="{{route('posts.show',$post->id)}}" wire:navigate>
+                                            <a href="{{route('posts.show',$post->slug)}}" wire:navigate>
                                                 <div>
                                                     <img src="{{asset($post->image)}}" width="70px" height="70px" style="object-fit: cover" alt="">
                                                 </div>
@@ -45,7 +45,7 @@
                                             
                                         </td>
                                         <td>
-                                            <a href="{{route('posts.show',$post->id)}}" 
+                                            <a href="{{route('posts.show',$post->slug)}}" 
                                                 wire:navigate
                                                 class="nav-link">{{$post->name}}</a>
                                         </td>
@@ -60,7 +60,7 @@
                                         <td>{{$post->type->name}}</td>
                                         <td>{{$post->attstatus->name}}</td>
                                         <td>{{$post->status->name}}</td>
-                                        <td>{{$post->user["name"]}}</td>
+                                        <td>{{$post->user->name}}</td>
                                         <td>{{$post->created_at -> format("d M y")}}</td>
                                         <td>{{$post->updated_at -> format("d M y")}}</td>
                                         <td>

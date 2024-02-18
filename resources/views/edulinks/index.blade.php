@@ -86,7 +86,10 @@
                                         @if ($edulink->post_id == $enroll->post_id)
                                             <tr>
                                                 <td>{{$idx + $edulinks -> firstItem()}}</td>
-                                                <td><a href="{{route('posts.show',$edulink->post->id)}}">{{$edulink->post->name}}</a></td>
+                                                <td>
+                                                    <a href="{{route('posts.show',$edulink->post->slug)}}"
+                                                    wire:navigate>{{$edulink->post->name}}</a>
+                                                </td>
                                                 <td>{{$edulink->tag->name}}</td>
                                                 <td>{{date("d M y",strToTime($edulink->classdate))}}</td>
                                                 <td>

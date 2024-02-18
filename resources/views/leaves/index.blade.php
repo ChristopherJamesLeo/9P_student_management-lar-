@@ -40,7 +40,7 @@
                                             
                                         </td>
                                         <td>
-                                            <a href="{{route('users.show',$leave->user->id)}}"
+                                            <a href="{{route('users.show',$leave->user->slug)}}"
                                                 wire:navigate>
                                                 {{$leave->user->name}}
                                             </a>
@@ -52,7 +52,7 @@
                                             {{date("d M Y",strToTime($leave->enddate))}}
                                         </td>
                                         <td>
-                                            <a href="{{route('posts.show',$leave->post->id)}}"
+                                            <a href="{{route('posts.show',$leave->post->slug)}}"
                                                 wire:navigate>
                                                 {{$leave->post->name}}
                                             </a>
