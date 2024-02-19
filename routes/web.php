@@ -3,10 +3,12 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AnnouncementsController;
 use App\Http\Controllers\AttendancesController;
 use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\CountriesController;
 use App\Http\Controllers\DaysController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EnrollsController;
 use App\Http\Controllers\EdulinksController;
 use App\Http\Controllers\GendersController;
@@ -20,19 +22,25 @@ use App\Http\Controllers\TypesController;
 use App\Http\Controllers\UsersController;
 
 
-Route::get('/', function () {
-    return view('welcome');
-})->middleware(['auth', 'verified']);
+// Route::get('/', function () {
+//     return view('/dashboard');
+// })->middleware(['auth', 'verified']);
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
+    Route::get("/",[DashboardController::class,"index"])->name("dashboard.index");
+    Route::put("/update/{id}",[DashboardController::class,"update"])->name("dashboard.update");
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+
+    Route::resource('announcements',AnnouncementsController::class);
 
     Route::resource('attendances',AttendancesController::class);
 

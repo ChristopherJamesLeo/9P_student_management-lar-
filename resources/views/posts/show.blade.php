@@ -176,7 +176,7 @@
                             <ul class="p-2 list-unstyled show_detail" style="font-size: 14px">
                                 <li class=" d-flex justify-content-between">
                                     <span>Authorized By</span>
-                                    <span>{{$post->user->name}}</span>
+                                    <span><a href="{{route('users.show',$post->user->slug)}}">{{$post->user->name}}</a></span>
                                 </li>
                                 <li class=" d-flex justify-content-between">
                                     <span>Zoom Id</span>
@@ -278,7 +278,7 @@
                             @foreach ($enrolls as $enroll)
                                 <li class="d-flex justify-content-between">
                                     <span>
-                                        <a href="{{route('users.show',$enroll->user->id)}}"
+                                        <a href="{{route('users.show',$enroll->user->slug)}}"
                                             wire:navigate>
                                             <small>{{$enroll->user->name}}</small>
                                         </a>

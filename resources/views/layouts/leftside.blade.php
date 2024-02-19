@@ -7,7 +7,7 @@
                         <div class=" aside_body">
                             <ul class="d-flex flex-column align-items-start list-unstyled">
                                 <li class="">
-                                    <a href="{{route('dashboard')}}" wire:navigate class="d-flex align-items-center nav-link "><i class="fas fa-home fa-sm me-2"></i> Home</a>
+                                    <a href="{{route('dashboard.index')}}" wire:navigate class="d-flex align-items-center nav-link "><i class="fas fa-home fa-sm me-2"></i> Home</a>
                                 </li>
 
                                 <li class="" data-bs-toggle="collapse" data-bs-target="">
@@ -24,6 +24,9 @@
                                 </ul>
                                 <li class="">
                                     <a href="{{route('attendances.index')}}" wire:navigate class="nav-link d-flex align-items-center "> <i class="fas  fa-pencil-alt  fa-sm me-2"></i>Attendance</a>
+                                </li>
+                                <li class="">
+                                    <a href="{{route('announcements.index')}}" wire:navigate class="nav-link d-flex align-items-center "> <i class="fas  fa-bullhorn fa-sm me-2"></i>Announcement</a>
                                 </li>
                                 <li class="">
                                     <a href="{{route('leaves.index')}}" wire:navigate class="nav-link d-flex align-items-center "> <i class="fas fa-running fa-sm  me-2"></i>Leaves</a>

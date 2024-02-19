@@ -7,10 +7,8 @@
             <a href="{{route('posts.create')}}" wire:navigate class="btn btn-primary rounded-0">Create</a>
             <hr>
             <div class="mt-3 row">
-                {{-- <div class="table_container" style="overflow-x: scroll;"> --}}
-                    <div class="table_container" style="overflow-x: scroll;">
-                    {{-- <div class="table_main_container" > --}}
-                        <div class="table_main_container" style="width: 2000px">
+                <div class="table_container" style="overflow-x: scroll;">
+                    <div class="table_main_container" style="width: 2000px">
                         <table class="table w-100" >
                             <thead>
                                 <tr>
@@ -66,7 +64,7 @@
                                         <td>
                                             <div class="d-flex gap-2">
 
-                                                <a href="{{route('posts.edit',$post->id)}}"
+                                                <a href="{{route('posts.edit',$post->slug)}}"
                                                 wire:navigate 
                                                  class="btn btn-outline-primary btn-sm edit_form_btn"><i class="fas fa-edit"></i>
                                                 </a>

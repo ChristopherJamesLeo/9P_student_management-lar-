@@ -29,12 +29,14 @@
                                         {{-- <td>{{$idx + $statuses -> firstItem()}}</td> --}}
                                         <td>{{$idx + $enrolls -> firstItem()}}</td>
                                         <td class="invoice_img">
-                                            <a href="{{asset($enroll->image)}}" 
-                                                data-source="{{$enroll->image}}"
-                                                title = "{{$enroll->user->name}}"
-                                                class="">
-                                                <img src="{{asset($enroll->image)}}" width="70px" height="70px" style="object-fit: cover" alt="">
-                                            </a>
+                                            @if ($enroll ->image != null)
+                                                <a href="{{asset($enroll->image)}}" 
+                                                    data-source="{{$enroll->image}}"
+                                                    title = "{{$enroll->user->name}}"
+                                                    class="">
+                                                    <img src="{{asset($enroll->image)}}" width="70px" height="70px" style="object-fit: cover" alt="">
+                                                </a>
+                                            @endif
                                             
                                         </td>
                                         <td>

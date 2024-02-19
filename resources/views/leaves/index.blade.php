@@ -31,12 +31,14 @@
                                     <tr>
                                         <td>{{$idx + $leaves -> firstItem()}}</td>
                                         <td class="invoice_img">
-                                            <a href="{{asset($leave->image)}}" 
-                                                data-source="{{$leave->image}}"
-                                                title = "{{$leave->user->name}}"
-                                                class="">
-                                                <img src="{{asset($leave->image)}}" width="70px" height="70px" style="object-fit: cover" alt="">
-                                            </a>
+                                            @if ($leave->image != null)
+                                                <a href="{{asset($leave->image)}}" 
+                                                    data-source="{{$leave->image}}"
+                                                    title = "{{$leave->user->name}}"
+                                                    class="">
+                                                    <img src="{{asset($leave->image)}}" width="70px" height="70px" style="object-fit: cover" alt="">
+                                                </a>
+                                            @endif
                                             
                                         </td>
                                         <td>

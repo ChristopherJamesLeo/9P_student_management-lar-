@@ -1,10 +1,66 @@
-        Schema::create('reglists', function (Blueprint $table) {
-            $table->id();
-            $table -> string("reg_id");
-            $table -> foreignId("user_id")->constrained(
-                table :"users"
-            )->onUpdate("cascade")->onDelete("cascade");
-            $table->timestamps();
-        });
+@extends('layouts.index')
 
-        
+@section('content_area')
+    <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="p-2 rounded-1 border profile_container">
+                <div class=" profile_content_header">
+                    <div class="py-3 text-center profile_img_container">
+                        <img src="{{asset('./assets/imgs/profiles/about.jpg.webp')}}" width="150px" height="150px" class="rounded-circle border" alt="user_img">
+                    </div>
+                    <div class="text-center">
+                        <h5>User Name</h5>
+                        <span>Email</span>
+                        <div class="d-flex justify-content-between">
+                            <span class="">BID_1</span>
+                            <span class="">Admin</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile_content_body">
+                    <ul class="list-unstyled">
+                        <li class="px-2 py-1 d-flex justify-content-between">
+                            <span>Gender</span>
+                            <span>Male</span>
+                        </li>
+                        <li class="px-2 py-1 d-flex justify-content-between">
+                            <span>Role</span>
+                            <span>Admin</span>
+                        </li>
+                        <li class="px-2 py-1 d-flex justify-content-between">
+                            <span>City</span>
+                            <span>Bago</span>
+                        </li>
+                        <li class="px-2 py-1 d-flex justify-content-between">
+                            <span>Country</span>
+                            <span>Myanmar</span>
+                        </li>
+                        <li class="px-2 py-1 d-flex justify-content-between">
+                            <span>Status</span>
+                            <span>Active</span>
+                        </li>
+                        <li class="px-2 py-1 d-flex justify-content-between">
+                            <span>Phone</span>
+                            <span>09957092779</span>
+                        </li>
+                        <li class="px-2 py-1 d-flex justify-content-between">
+                            <span>Created At</span>
+                            <span>12 Mon 2023</span>
+                        </li>
+                        
+                    </ul>
+                </div>
+                <hr>
+                <div class="profile_content_footer">
+                    <div class="px-2 py-1 d-flex gap-2 justify-content-between">
+                        <a href="#" class="w-100 btn btn-success rounded-2">Edit</a>
+                        <a href="#" class="w-100 btn btn-danger rounded-2">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-md-6 col-sm-12">
+
+        </div>
+    </div>
+@endsection

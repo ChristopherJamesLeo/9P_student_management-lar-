@@ -58,7 +58,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="d-flex profile_group">
+                            <div class="d-flex align-items-center profile_group">
                                 <span>{{auth()->user()->name}}</span>
                                 <div class="ms-2">
                                    
@@ -66,11 +66,11 @@
                                         <img src="{{asset('./assets/imgs/profiles/about.jpg.webp')}}" class="rounded-circle" width="30px" height="30px" alt="">
                                     </a>
                                     <ul class="list-unstyled show_profile_setting">
-                                        <li class="p-2">
+                                        {{-- <li class="p-2">
                                             <a href="{{route('profile.edit')}}" class="nav-link d-flex justify-content-between">
                                                 Profile
                                             </a>
-                                        </li>
+                                        </li> --}}
                                         <li class="p-2">
                                             <form method="POST" class="logout_form" action="{{ route('logout') }}">
                                                 @csrf

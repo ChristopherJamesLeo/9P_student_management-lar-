@@ -184,10 +184,6 @@ class PostsController extends Controller
 
         // dd($post);
         $file = $post->image;
-    
-        if(File::exists($file)){
-            File::delete($file);
-        }
         
         $userId = Auth::user()->id;
 
@@ -209,6 +205,12 @@ class PostsController extends Controller
                 // dd($request["image"]);
         
         if(file_exists($request["image"])){
+
+
+    
+            if(File::exists($file)){
+                File::delete($file);
+            }
 
             $file = $request->file("image");
         

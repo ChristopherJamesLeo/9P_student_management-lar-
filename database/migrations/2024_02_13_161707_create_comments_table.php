@@ -14,16 +14,13 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table -> text("description");
-            $table -> unsignedBigInteger("user_id");
+            $table -> foreignId("user_id")->constrained("users")->onUpdate("cascade")->onDelete("cascade");
             $table -> unsignedBigInteger("commentable_id");
             $table -> string("commentable_type");
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('comments');
