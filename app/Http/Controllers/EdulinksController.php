@@ -21,7 +21,7 @@ class EdulinksController extends Controller
     public function index()
     {
 
-        $data["edulinks"] = Edulink::paginate(7);
+        $data["edulinks"] = Edulink::filter()->searchonly()->paginate(7);
 
         $data["enrolls"] = Enroll::where("user_id",Auth::user()->id)->get();
 
@@ -32,6 +32,8 @@ class EdulinksController extends Controller
         $data["posts"] = Post::all()->pluck("name","id");
 
         $data["tags"] = Tag::where("status_id",["3","4"])->pluck("name","id");
+
+        $data["filterRoles"] = Post::orderBy("updated_at","desc")->get();
 
         return view("edulinks.index",$data);
     }

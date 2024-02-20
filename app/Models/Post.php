@@ -76,4 +76,27 @@ class Post extends Model
     public function checkenroll($user_id) {
         return \DB::table("enrolls")->where("post_id",$this->id)->where("user_id",$user_id)->exists();
     }
+
+
+    public function scopefilter($query){
+        return $query -> where(function($query){
+            if($getfilter = request("filter")){
+                $query -> where("slug",$getfilter);
+            }
+        });
+    }
+
+    public function scopesearchonly($query){
+        return $query -> where(function($query){
+            if($getsearchonly = request("searchonly")){
+                $query -> where("name","LIKE","%".$getsearchonly."%")
+                     -> orWhere("fee","LIKE","%".$getsearchonly."%")
+                ->orWhereHas("user",function($query) use($getsearchonly){
+                    $query -> where("name","LIKE","%".$getsearchonly."%");
+                })->orWhereHas("status",function($query) use($getsearchonly){
+                    $query -> where("name","LIKE","%".$getsearchonly."%");
+                });
+            }
+        });
+    }
 }

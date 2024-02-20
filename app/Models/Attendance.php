@@ -29,4 +29,22 @@ class Attendance extends Model
     }
 
 
+    public function scopefilter($query){
+        return $query -> where(function($query){
+            if($getfilter = request("filter")){
+                $query -> where("post_id",$getfilter);
+            }
+        });
+    }
+
+    public function scopesearchonly($query){
+        return $query -> where(function($query){
+            if($getsearchonly = request("searchonly")){
+                $query -> where("name","LIKE","%".$getsearchonly."%")
+                     -> orWhere("classdate","LIKE","%".$getsearchonly."%")
+                     -> orWhere("created_at","LIKE","%".$getsearchonly."%")
+                     -> orWhere("updated_at","LIKE","%".$getsearchonly."%");
+            }
+        });
+    }
 }

@@ -23,8 +23,11 @@ class EnrollsController extends Controller
 
     public function index()
     {
-        $data["enrolls"] = Enroll::orderby("created_at","desc")->paginate(30);
+        $data["enrolls"] = Enroll::filter()->searchonly()->orderby("created_at","desc")->paginate(30);
         $data["stages"] = Stage::whereIn("id",["1","2","3"])->pluck("name","id");
+
+        $data["filterRoles"] = Post::orderBy("updated_at","desc")->get();
+        
         return view("enrolls.index",$data);
     }
 

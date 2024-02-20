@@ -60,4 +60,27 @@ class User extends Authenticatable
         return $this -> hasOne(Registration::class,"user_id");
     }
 
+    public function scopefilter($query){
+        return $query -> where(function($query){
+            if($getfilter = request("filter")){
+                $query -> where("role_id",$getfilter);
+            }
+        });
+    }
+
+    public function scopesearchonly($query){
+        return $query -> where(function($query){
+            if($getsearchonly = request("searchonly")){
+                $query -> where("name","LIKE","%".$getsearchonly."%")
+                        ->orWhereHas("registration",function($query) use ($getsearchonly){
+                            $query -> where("reg_no","LIKE","%".$getsearchonly."%");
+                        })->orWhereHas("city",function($query) use($getsearchonly){
+                            $query -> where("name","LIKE","%".$getsearchonly."%");
+                        })->orWhereHas("country",function($query) use($getsearchonly){
+                            $query -> where("name","LIKE","%".$getsearchonly."%");
+                        });
+            }
+        });
+    }
+
 }

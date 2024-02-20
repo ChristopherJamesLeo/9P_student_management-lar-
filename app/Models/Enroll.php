@@ -53,4 +53,22 @@ class Enroll extends Model
     public function stagename(){
         return $this -> stage -> name;
     }
+
+    public function scopefilter($query){
+        return $query -> where(function($query){
+            if($getfilter = request("filter")){
+                $query -> where("id",$getfilter);
+            }
+        });
+    }
+
+    public function scopesearchonly($query){
+        return $query -> where(function($query){
+            if($getsearchonly = request("searchonly")){
+                $query ->whereHas("user",function($query) use($getsearchonly){
+                    $query -> where("name","LIKE","%".$getsearchonly."%");
+                });
+            }
+        });
+    }
 }

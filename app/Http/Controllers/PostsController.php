@@ -23,7 +23,9 @@ class PostsController extends Controller
 
     public function index()
     {
-        $data['posts'] = Post::paginate(4);
+        $data['posts'] = Post::filter()->searchonly()->paginate(4);
+
+        $data["filterRoles"] = Post::orderBy("updated_at","desc")->get();
         
         return view("posts.index",$data);
     }

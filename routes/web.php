@@ -17,6 +17,7 @@ use App\Http\Controllers\PostsController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\StagesController;
+use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TypesController;
 use App\Http\Controllers\UsersController;
@@ -29,6 +30,10 @@ use App\Http\Controllers\UsersController;
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/auth/{provider}/redirect',[SocialiteController::class,"redirect"]);
+ 
+Route::get('/auth/{provider}/callback', [SocialiteController::class,"callback"]);
+
 
 Route::middleware('auth')->group(function () {
 

@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 
 use App\Models\User;
 use App\Models\Enroll;
+use App\Models\Role;
 use App\Models\Leave;
 
 
@@ -19,7 +20,9 @@ class UsersController extends Controller
 
     public function index()
     {
-        $data["users"] = User::paginate(20);
+        $data["users"] = User::filter()->searchonly()->paginate(20);
+
+        $data["filterRoles"] = Role::where("status_id",3)->get();
 
         return view("users.index",$data);
     }

@@ -13,9 +13,12 @@ class AttendancesController extends Controller
 
     public function index()
     {
-        $data["attendances"] = Attendance::orderBy("created_at","desc")->paginate(10);
+        $data["attendances"] = Attendance::filter()->searchonly()->orderBy("created_at","desc")->paginate(10);
+        
         $data["posts"] = Post::pluck("name","id");
 
+        $data["filterRoles"] = Post::orderBy("updated_at","desc")->get();
+        
         return view("attendances.index",$data);
     }
 

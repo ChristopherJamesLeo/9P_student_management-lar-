@@ -30,7 +30,30 @@
                 </div>
         
             </form>
-        
+            <hr>
+            {{-- start search box --}}
+            <div class="search_form_container">
+                <form action="" method="">
+                    <div class="row justify-content-end">
+                        <div class="col-lg-4 col-md-6 mb-2">
+                            <select name="filter" id="filter" class="form-control rounded-0 outline-none shadow-none" value="{{request('filter')}}">
+                                <option value="" selected disabled>Search Post</option>
+                                @foreach ($filterRoles as $filterRole)
+                                    <option value="{{$filterRole->id}}" {{$filterRole->id == request("filter") ? "selected" : ""}}>{{$filterRole->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mb-2">
+                            <div class="input-group">
+                                <input type="text" name="searchonly" id="search_box" class="form-control rounded-0 outline-none shadow-none border" placeholder="Search Box...." value="{{request('searchonly')}}">
+                                <button type="submit" class="btn btn-primary rounded-0 outline-none shadow-none"><i class="fas fa-search"></i></button>
+                                <button type="button" id="restart_search_btn" class="btn btn-secondary"><i class="fas fa-sync"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {{-- end search box --}}
             <div class="row">
                 <div class="table_container">
                     <div class="table_main_container">
@@ -163,6 +186,24 @@
         })
         // end delete btn
 
+        // start filter 
+        document.querySelector("#filter").addEventListener("change",function(){
+            // console.log(this.value);
+            let getFilterSelectValue = this.value;
+
+            window.location.href = window.location.href.split("?")[0]+"?filter="+getFilterSelectValue;
+        })
+
+        document.querySelector("#restart_search_btn").addEventListener("click",function(){
+            const getfilter = document.getElementById("filter");
+            const getsearch = document.getElementById("search_box");
+            getfilter.selectedIndex = 0;
+            getsearch.value = "";
+
+            
+            window.location.href = window.location.href.split("?")[0];
+        })
+        // end filter
     })
 </script>
 @endsection

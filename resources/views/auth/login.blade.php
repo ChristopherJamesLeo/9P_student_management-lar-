@@ -1,7 +1,15 @@
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
+    <div class="flex justify-between">
+        <a href="/auth/github/redirect" class="p-2 border rounded border-gray-200"><i class="fab fa-github"></i> Git Hub</a>
+        <a href="/auth/google/redirect" class="p-2 border rounded border-gray-200"><i class="fab fa-google"></i> Google</a>
+    </div>
 
+    @if (session()->has("warning"))
+        <span class="">{{ session()->get("warning") }}</span>
+    @endif
+    
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
