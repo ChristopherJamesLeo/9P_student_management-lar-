@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
+
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\AnnouncementNotify;
 
 use App\Models\Announcement;
 use App\Models\Status;
 use App\Models\Role;
+use App\Models\User;
 
 use App\Models\Post;
 use App\Models\Tag;
@@ -19,12 +24,25 @@ class AnnouncementsController extends Controller
 
     public function index()
     {
-        $data["announcements"] = Announcement::paginate(10);
+        $data["announcements"] = Announcement::orderby("updated_at","desc")->paginate(10);
         $data["posts"] = Post::all();
 
         // dd($data["posts"]);
         $data["statuses"] = Status::whereIn("id",["7","8"])->pluck("name","id");
         $data["roles"] = Role::pluck("name","id");
+
+
+        $type = "App\Notifications\AnnouncementNotify";
+
+        $getNotis = \DB::table("notifications")->where("type",$type)->where("notifiable_id",Auth::user()->id)->pluck("id");
+
+
+        foreach ($getNotis as $getNoti) {
+            \DB::table("notifications")->where("id", $getNoti)->update(["read_at" => now()]);;
+        }
+        
+        
+
         return view("announcements.index",$data);
     }
 
@@ -68,6 +86,16 @@ class AnnouncementsController extends Controller
         }
 
         $announcement -> save();
+
+        $data = [
+            "id"=> $announcement->id,
+            "title" => $announcement -> title,
+            "message" => $announcement -> message,
+        ]; 
+
+        $users = User::where("role_id",$announcement->role_id)->get();
+
+        Notification::send($users,new AnnouncementNotify($data));
 
         session()->flash("success","Announcement Insert Successful");
         
@@ -158,6 +186,20 @@ class AnnouncementsController extends Controller
         $announcement->delete();
         
         session()->flash("success","Announcement Delete Successful");
+
+        return redirect()->back();
+    }
+
+    public function markednoti(){
+        $type = "App\Notifications\AnnouncementNotify";
+
+        $getNotis = \DB::table("notifications")->where("type",$type)->where("notifiable_id",Auth::user()->id)->pluck("id");
+
+
+        foreach ($getNotis as $getNoti) {
+            \DB::table("notifications")->where("id", $getNoti)->delete();
+        }
+
 
         return redirect()->back();
     }

@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::resource('announcements',AnnouncementsController::class);
+    Route::get('announcement/markread',[AnnouncementsController::class,"markednoti"])->name("announcement.markread");
 
     Route::resource('attendances',AttendancesController::class);
 

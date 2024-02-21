@@ -27,35 +27,29 @@
                         </div>
                         <div class="d-flex align-items-center gap-4 user_info_group">
                             <div class="noti_group">
-                                <a href="javascript:void(0)" class="nav-link show_noti" onclick="showlist()"><i class="fas fa-bell"></i></a>
+                                <a href="javascript:void(0)" class="nav-link show_noti" onclick="showlist()"><i class="fas fa-bell"></i><span class="badge bg-primary">{{count(Auth::user()->unreadNotifications)}}</span></a>
                                 <ul class="list-unstyled show_noti_list">
-                                    <li class="p-2">
-                                        <a href="#" class="nav-link d-flex justify-content-between">
-                                            <small>
-                                                <span class="d-block">Title</span>
-                                                <span>Content</span>
-                                            </small>
-                                            <small>12d</small>
+                                    @foreach (Auth::user()->notifications as $notification)
+                                        <li class="border p-2">
+                                            <a href="{{route("announcements.index")}}"
+                                            wire:navigate
+                                             class="nav-link d-flex justify-content-between">
+                                                <small>
+                                                    <span class="d-block">{{$notification->data["title"]}}</span>
+                                                    <span>{{Str::limit($notification->data["message"],20)}}</span>
+                                                </small>
+                                                <small>{{$notification->created_at->format("d m y")}}</small>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                    <li class="border p-2">
+                                        <a href="{{route("announcement.markread")}}"
+                                        wire:navigate
+                                         class="nav-link d-flex justify-content-between text-capitalize">
+                                            Make all readed
                                         </a>
                                     </li>
-                                    <li class="p-2">
-                                        <a href="#" class="nav-link d-flex justify-content-between">
-                                            <small>
-                                                <span class="d-block">Title</span>
-                                                <span>Content</span>
-                                            </small>
-                                            <small>12d</small>
-                                        </a>
-                                    </li>
-                                    <li class="p-2">
-                                        <a href="#" class="nav-link d-flex justify-content-between">
-                                            <small>
-                                                <span class="d-block">Title</span>
-                                                <span>Content</span>
-                                            </small>
-                                            <small>12d</small>
-                                        </a>
-                                    </li>
+
                                 </ul>
                             </div>
                             <div class="d-flex align-items-center profile_group">
