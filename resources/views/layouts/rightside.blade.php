@@ -25,15 +25,20 @@
                         <div>
                             <h5 class="m-0 p-0 d-none d-md-block">{{ucfirst(\Request::path())}}</h5>
                         </div>
-                        <div class="d-flex align-items-center gap-4 user_info_group">
-                            <div class="noti_group">
-                                <a href="javascript:void(0)" class="nav-link show_noti" onclick="showlist()"><i class="fas fa-bell"></i><span class="badge bg-primary">{{count(Auth::user()->unreadNotifications)}}</span></a>
-                                <ul class="list-unstyled show_noti_list">
+                        <div class="d-flex align-items-center gap-4">
+                            {{-- <div class="noti_group dropdown"> --}}
+                            <div class=" dropdown">
+                                {{-- <a href="javascript:void(0)" class="nav-link show_noti dropdown-toggle" onclick="showlist()"> --}}
+                                <a href="javascript:void(0)" class="nav-link show_noti dropdown-toggle" data-bs-toggle="dropdown">
+                                    <i class="fas fa-bell"></i>
+                                    <span class="badge bg-primary rounded-circle">{{count(Auth::user()->unreadNotifications)}}</span>
+                                </a>
+                                <ul class="list-unstyled p-0 dropdown-menu">
                                     @foreach (Auth::user()->notifications as $notification)
                                         <li class="border p-2">
                                             <a href="{{route("announcements.index")}}"
                                             wire:navigate
-                                             class="nav-link d-flex justify-content-between">
+                                             class="nav-link dropdown-item d-flex justify-content-between">
                                                 <small>
                                                     <span class="d-block">{{$notification->data["title"]}}</span>
                                                     <span>{{Str::limit($notification->data["message"],20)}}</span>
@@ -45,7 +50,7 @@
                                     <li class="border p-2">
                                         <a href="{{route("announcement.markread")}}"
                                         wire:navigate
-                                         class="nav-link d-flex justify-content-between text-capitalize">
+                                         class="dropdown-item nav-link d-flex justify-content-between text-capitalize">
                                             Make all readed
                                         </a>
                                     </li>
@@ -54,12 +59,12 @@
                             </div>
                             <div class="d-flex align-items-center profile_group">
                                 <span>{{auth()->user()->name}}</span>
-                                <div class="ms-2">
+                                <div class="ms-2 dropdown">
                                    
-                                    <a href="javascript:void(0)" class="nav-link profile_list" onclick="showProfileSet()">
+                                    <a href="javascript:void(0)" class="nav-link profile_list dropdown-toggle" data-bs-toggle="dropdown">
                                         <img src="{{asset('./assets/imgs/profiles/about.jpg.webp')}}" class="rounded-circle" width="30px" height="30px" alt="">
                                     </a>
-                                    <ul class="list-unstyled show_profile_setting">
+                                    <ul class="list-unstyled p-1 dropdown-menu show_profile_setting">
                                         {{-- <li class="p-2">
                                             <a href="{{route('profile.edit')}}" class="nav-link d-flex justify-content-between">
                                                 Profile
@@ -69,7 +74,7 @@
                                             <form method="POST" class="logout_form" action="{{ route('logout') }}">
                                                 @csrf
                                                 @method("POST")
-                                                <a href="{{route('logout')}}" class="nav-link logoutbtn">Log Out</a>
+                                                <a href="{{route('logout')}}" class="dropdown-item nav-link logoutbtn">Log Out</a>
                                             </form>
                                             <script>
                                                 document.querySelector(".logoutbtn").addEventListener("click",function logout(e){

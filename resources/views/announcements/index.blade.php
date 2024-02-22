@@ -34,10 +34,12 @@
     {{-- start create status --}}
     <div class="row">
         <div>
-            <a href="javascript:void(0)" 
-            data-bs-target="#create_announcement_modal"
-            data-bs-toggle="modal"
-            class="btn btn-primary rounded-0">Create</a>
+            @if (Auth::user()->id == 1 || Auth::user()->id == 2)
+                <a href="javascript:void(0)" 
+                data-bs-target="#create_announcement_modal"
+                data-bs-toggle="modal"
+                class="btn btn-primary rounded-0">Create</a>
+            @endif
             {{-- start create model --}}
             <div id="create_announcement_modal" class="modal fade">
                 <div class="modal-dialog modal-lg modal-dialog-center">
@@ -167,18 +169,35 @@
                                                 data-id = "{{$announcement->id}}"
                                                 data-image = "{{$announcement->image}}"
                                                 data-title = "{{$announcement->title}}"
-                                                data-post = "{{$announcement->post->id}}"
+                                                data-post = "{{$announcement->post->name}}"
                                                 data-user = "{{$announcement->user->name}}"
                                                 data-message = "{{$announcement->message}}"
-                                                data-role = "{{$announcement->role->id}}"
+                                                data-role = "{{$announcement->role->name}}"
                                                 data-status = "{{$announcement->status->id}}"
                                                 data-bs-toggle = "modal"
-                                                data-bs-target = "#editmodal"
-                                                class="btn btn-outline-primary btn-sm edit_form_btn"><i class="fas fa-edit"></i></a>
+                                                data-bs-target = "#showmodal"
+                                                class="btn btn-outline-primary btn-sm show_form_btn"><i class="fas fa-eye"></i></a>
 
-                                                <a href="javascript:void(0)" 
-                                                data-id={{$announcement->id}} 
-                                                class="btn btn-danger btn-sm delete_btn" ><i class="fas fa-trash"></i></a>
+                                                @if (Auth::user()->id == 1 || Auth::user()->id == 2)
+                                                    <a href="javascript:void(0)"
+                                                    data-id = "{{$announcement->id}}"
+                                                    data-image = "{{$announcement->image}}"
+                                                    data-title = "{{$announcement->title}}"
+                                                    data-post = "{{$announcement->post->id}}"
+                                                    data-user = "{{$announcement->user->name}}"
+                                                    data-message = "{{$announcement->message}}"
+                                                    data-role = "{{$announcement->role->id}}"
+                                                    data-status = "{{$announcement->status->id}}"
+                                                    data-bs-toggle = "modal"
+                                                    data-bs-target = "#editmodal"
+                                                    class="btn btn-outline-primary btn-sm edit_form_btn"><i class="fas fa-edit"></i></a>
+
+                                                    <a href="javascript:void(0)" 
+                                                    data-id={{$announcement->id}} 
+                                                    class="btn btn-danger btn-sm delete_btn" ><i class="fas fa-trash"></i></a>
+
+                                                @endif
+                                                
                                             </div>
                                         </td>
                                         <form id="formdelete{{$announcement->id}}" action="{{route('announcements.destroy',$announcement->id)}}" method="POST">
@@ -194,7 +213,7 @@
                     </div>
                 </div>
 
-        
+                {{-- start edit modal --}}
                 <div id="editmodal" class="modal fade">
                     <div class="modal-dialog modal-lg modal-dialog-center">
                         <div class="modal-content">
@@ -275,6 +294,55 @@
                         </div>
                     </div>
                 </div>
+                {{-- end edit modal --}}
+                <div id="showmodal" class="modal fade">
+                    <div class="modal-dialog modal-lg modal-dialog-center">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6>Show Announcement</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="" id="" method="POST" enctype="multipart/form-data">
+                                    @csrf 
+                                    @method("PUT")
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="p-2 border show_leave_img_container">
+                                                <a href="" title="" data-source="">
+                                                    <img src="" id="show_announcement_img" class="" width="100%" height="auto" style="object-fit: cover"  alt="show invoice">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="row">
+                                                
+                                                <div class="col-12 form-group mb-2">
+                                                    <input type="text" name="" id="show_title" class="form-control rounded-0 outline-none shadow-none" readonly>
+                                                </div>
+                                                <div class="col-12 form-group mb-2">
+                                                    <textarea name="message" id="show_message" 
+                                                    class="form-control rounded-0 shadow-none outline-none"
+                                                    cols="" 
+                                                    rows="7" 
+                                                    readonly
+                                                    placeholder="Enter Message">{{old('message')}}</textarea>
+                                                </div>
+                                                <div class="col-12 form-group mb-2">
+                                                    <input type="text" name="" id="show_post" class="form-control rounded-0 outline-none shadow-none" readonly >
+                                                </div>
+                                                <div class="col-12 form-group mb-2">
+                                                    <input type="text" name="" id="show_role" class="form-control rounded-0 outline-none shadow-none" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -287,6 +355,23 @@
 
 <script>
     $(document).ready(function(){
+        // start show form 
+        $(".show_form_btn").click(function(){
+            let getId = $(this).data("id");
+            let getTitle = $(this).data("title")
+            let getImage = $(this).data("image");
+            let getPost = $(this).data("post");
+            let getMessage = $(this).data("message");
+            let getRole = $(this).data("role");
+
+            $("#show_title").val(getTitle);
+            $("#show_message").val(getMessage);
+            $("#show_post").val(getPost);
+            $("#show_role").val(getRole);
+            $("#show_announcement_img").attr("src",`${getImage}`);
+
+        })
+        // end show form
         // start edit form
         $(".edit_form_btn").click(function(){
             let getId = $(this).data("id");

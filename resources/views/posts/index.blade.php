@@ -4,8 +4,11 @@
     {{-- start create status --}}
     <div class="row">
         <div>
-            <a href="{{route('posts.create')}}" wire:navigate class="btn btn-primary rounded-0">Create</a>
-            <hr>
+            @if (Auth::user()->id == 1 || Auth::user()->id == 2)
+                <a href="{{route('posts.create')}}" wire:navigate class="btn btn-primary rounded-0">Create</a>
+                <hr>
+            @endif
+           
             {{-- start search box --}}
             <div class="search_form_container">
                 <form action="" method="">
@@ -50,7 +53,9 @@
                                     <th>By</th>
                                     <th>Created At</th>
                                     <th>Updated At</th>
+                                    @if (Auth::user()->id == 1 || Auth::user()->id == 2)
                                     <th>Action</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -84,6 +89,8 @@
                                         <td>{{$post->user->name}}</td>
                                         <td>{{$post->created_at -> format("d M y")}}</td>
                                         <td>{{$post->updated_at -> format("d M y")}}</td>
+                                        @if (Auth::user()->id == 1 || Auth::user()->id == 2)
+
                                         <td>
                                             <div class="d-flex gap-2">
 
@@ -97,6 +104,8 @@
                                                 class="btn btn-danger btn-sm delete_btn" ><i class="fas fa-trash"></i></a> --}}
                                             </div>
                                         </td>
+                                        @endif
+
                                         {{-- <form id="formdelete{{$post->id}}" action="{{route('posts.destroy',$post->id)}}" method="POST">
                                             {{ csrf_field() }}
                                             {{ method_field('DELETE') }}

@@ -143,7 +143,7 @@
                         </div>
                         
                         <hr>
-                        <div class="d-flex">
+                        {{-- <div class="d-flex">
                             <a href="{{route('users.edit',$user->slug)}}"
                                 wire:navigate 
                                 class="w-100 btn btn-primary rounded-0 shadow-none outline-none">Edit</a>
@@ -153,7 +153,7 @@
                             data-id={{$user->id}}  
                             data-email = {{Auth::user()->email}}
                             class="w-100 btn btn-outline-primary rounded-0 shadow-none outline-none delete_btn">Delete</a>
-                        </div>
+                        </div> --}}
                         <form id="formdelete{{$user->id}}" action="{{route('users.destroy',$user->id)}}" method="POST">
                             {{ csrf_field() }}
                             {{ method_field('DELETE') }}
@@ -202,7 +202,10 @@
                         
                         @endif
                         {{-- start leave button --}}
-                        @if ($user->role_id == 1 || $user->role_id == 2)
+                    @if( $user->id != Auth::user()->id)
+                           
+                         
+                        @if ($user->role_id == 1 || $user->role_id == 2 )
                                     
                             <div class="mb-3 d-grid">
                                 <button type="button"
@@ -314,6 +317,7 @@
                         </form>
                         {{-- end email contact form --}}
                         <hr>
+                    @endif
                         <h6 class="mt-2">Enrolls</h6>
                         <div class="row">
                             @foreach ($enrolls as $enroll)
