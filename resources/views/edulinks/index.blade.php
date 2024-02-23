@@ -4,10 +4,15 @@
     {{-- start create status --}}
     <div class="row">
         <div>
-            <a href="javascript:void(0)"
-            data-bs-target="#create_form"
-            data-bs-toggle="modal" 
-            class="btn btn-primary rounded-0">Create</a>
+
+            @if (Auth::user()->role_id === 1)
+                <a href="javascript:void(0)"
+                data-bs-target="#create_form"
+                data-bs-toggle="modal" 
+                class="btn btn-primary rounded-0">Create</a>
+                <hr>
+            @endif
+
 
 
             {{-- start create Model --}}
@@ -60,7 +65,7 @@
 
             {{-- end create model --}}
 
-            <hr>
+            
             {{-- start search box --}}
             <div class="search_form_container">
                 <form action="" method="">

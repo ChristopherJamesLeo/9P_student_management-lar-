@@ -20,8 +20,9 @@
     @endif
 
     @if (session()->has("info"))
-        <script>toastr.success('{{session()->get('info')}}', 'Information')</script>
+        <script>toastr.info('{{session()->get('info')}}', 'Information')</script>
     @endif
+
 
     @if ($errors)
         @foreach ($errors->all() as $error)

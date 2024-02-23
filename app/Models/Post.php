@@ -61,6 +61,10 @@ class Post extends Model
         return $this -> belongsTo(Status::class);
     }
 
+    public function stage(){
+        return $this -> belongsTo(Stage::class);
+    }
+
     public function user(){
         return $this -> belongsTo(User::class);
     }
@@ -75,6 +79,10 @@ class Post extends Model
 
     public function checkenroll($user_id) {
         return \DB::table("enrolls")->where("post_id",$this->id)->where("user_id",$user_id)->exists();
+    }
+
+    public function checkstage($user_id) {
+        return \DB::table("enrolls")->where("post_id",$this->id)->where("user_id",$user_id)->where("stage_id",1)->exists();
     }
 
 

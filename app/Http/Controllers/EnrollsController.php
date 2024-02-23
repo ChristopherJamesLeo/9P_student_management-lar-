@@ -70,13 +70,13 @@ class EnrollsController extends Controller
 
         $user = Auth::user();
 
-        $post_id = $enroll->post_id;
+        $post_slug = $enroll->slug;
 
         $emailnotidata = [
             
             "name" => $enroll->postname(),
             "stage" => $enroll -> stagename(),
-            "url" => url("posts/".$post_id)
+            "url" => url("posts/".$post_slug)
 
         ];
 

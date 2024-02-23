@@ -174,6 +174,7 @@
                         <div>
                             <span class="fw-bold d-block text-center">Info</span>
                             <ul class="p-2 list-unstyled show_detail" style="font-size: 14px">
+                               
                                 <li class=" d-flex justify-content-between">
                                     <span>Authorized By</span>
                                     <span><a href="{{route('users.show',$post->user->slug)}}">{{$post->user->name}}</a></span>
@@ -181,11 +182,15 @@
                                 <li class=" d-flex justify-content-between">
                                     <span>Zoom Id</span>
                                     <span>{{$post->zoomid}}</span>
-                                </li>
-                                <li class=" d-flex justify-content-between">
-                                    <span>Pass Code</span>
-                                    <span>{{$post->passcode}}</span>
-                                </li>
+                                </li> 
+                                @if ($post->checkenroll(Auth::user()->id ) && $post -> checkstage(Auth::user()->id))
+                                    <li class=" d-flex justify-content-between">
+                                        <span>Pass Code</span>
+                                        <span>{{$post->passcode}}</span>
+                                    </li>
+                                @endif
+            
+                                
                                 <li class="  d-flex justify-content-between">
                                     <span>Fee</span>
                                     <span>{{$post->fee}}</span>

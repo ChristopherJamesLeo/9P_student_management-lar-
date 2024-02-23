@@ -21,6 +21,7 @@ use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TypesController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\UserLikeController;
 
 
 // Route::get('/', function () {
@@ -92,6 +93,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('users',UsersController::class);
     Route::get('/userstatus',[UsersController::class,"userstatus"]);
     Route::post('/usersendemail',[UsersController::class,"usersendemail"])->name('user.sendemail');
+
+    Route::get('/userlike/{id}',[UserLikeController::class,"like"])->name('user.like');
+    Route::get('/userunlike/{id}',[UserLikeController::class,"unlike"])->name('user.unlike');
+
+    Route::get('/user/{slug}/message',function($slug){
+        session()->flash("info","Message Invalid Not Now");
+        return redirect()->back();
+    })->name("user.message");
 
 
 });

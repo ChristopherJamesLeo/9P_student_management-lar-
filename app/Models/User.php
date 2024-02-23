@@ -83,4 +83,16 @@ class User extends Authenticatable
         });
     }
 
+    public function checklike($liker_id){
+        return \DB::table("user_like")->where("user_id",auth()->user()->id)->where("liker_id",$liker_id)->exists();
+    }
+
+    public function countlike($liker_id){
+        if (auth()->check()) {
+            return \DB::table("user_like")->where("liker_id", $liker_id)->count();
+        } else {
+            return 0; 
+        }
+    }
+
 }

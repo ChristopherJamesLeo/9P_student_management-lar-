@@ -35,12 +35,8 @@
                 <div class="profile_content_body">
                     <ul class="list-unstyled">
                         <li class="px-2 py-1 d-flex justify-content-between">
-                            <span>Followers</span>
-                            <span>1 Followers</span>
-                        </li>
-                        <li class="px-2 py-1 d-flex justify-content-between">
                             <span>Likes</span>
-                            <span>1 Likes</span>
+                            <span>{{$user->countlike($user->id)}} Likes</span>
                         </li>
                         <li class="px-2 py-1 d-flex justify-content-between">
                             <span>Gender</span>

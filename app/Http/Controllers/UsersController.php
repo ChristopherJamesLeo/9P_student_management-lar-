@@ -10,6 +10,11 @@ use App\Models\User;
 use App\Models\Enroll;
 use App\Models\Role;
 use App\Models\Leave;
+use App\Models\Gender;
+use App\Models\City;
+use App\Models\Country;
+use App\Models\Status;
+
 
 
 
@@ -42,11 +47,8 @@ class UsersController extends Controller
 
     public function show(string $slug)
     {
-        // $data["user"] = User::findOrFail($id);
-
         $data["user"] = User::where("slug",$slug)->firstOrFail();
 
-        // dd($data["user"]);
 
         $id = $data["user"]->id;
 
@@ -57,6 +59,16 @@ class UsersController extends Controller
         $data["leaves"] = Leave::where("user_id",$id)->orderby("created_at","desc")->get();
 
         $data["today"] = Carbon::today()->format("Y-m-d");
+
+        $data["genders"]= Gender::pluck("name","id");
+
+        $data["roles"]= Role::pluck("name","id");
+
+        $data["cities"]= City::pluck("name","id");
+
+        $data["countries"]= Country::pluck("name","id");
+
+        $data["statuses"]= Status::whereIn("id",["1","2","16","18"])->pluck("name","id");
 
         return view("users.show",$data);
     }
@@ -70,13 +82,32 @@ class UsersController extends Controller
 
     public function update(Request $request, string $id)
     {
-        //
+        $this -> validate(request(),[
+            "status_id" => "required",
+            "role_id" => "required"
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $user -> status_id = $request["status_id"];
+        $user -> role_id = $request["role_id"];
+
+        $user -> save();
+
+        session()->flash("success","User Data Update Successful");
+
+        return redirect()->back();
+
     }
 
 
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $user -> delete();
+
+        return redirect()->route("users.index");
     }
 
 

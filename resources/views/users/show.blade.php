@@ -93,13 +93,24 @@
                             
                         </div>
                     </div>
-                    <div class="mt-3 d-flex">
-                        <a href="{{route('users.edit',$user->id)}}" 
-                            class="w-100 btn btn-primary rounded-0 shadow-none outline-none">Like</a>
 
-                        <a href="javascript:void(0)"
-                            class="w-100 btn btn-outline-primary rounded-0 shadow-none outline-none ">Follow</a>
-                    </div>
+                    @if (Auth::user()->id != $user->id)
+                        <div class="mt-3 d-flex">
+                            @if (!$user -> checklike($user->id))
+                                <a href="{{route('user.like',$user->id)}}" 
+                                wire:navigate
+                                class="w-100 btn btn-primary rounded-0 shadow-none outline-none">Like</a>
+                            @else
+                                <a href="{{route('user.unlike',$user->id)}}" 
+                                wire:navigate
+                                class="w-100 btn btn-primary rounded-0 shadow-none outline-none">Unlike</a>
+                            @endif
+                                <a href="{{route('user.message',$user->slug)}}"
+                                    wire:navigate
+                                    class="w-100 btn btn-outline-primary rounded-0 shadow-none outline-none ">Message</a>
+                        </div>
+                    @endif
+                    
                     <div class="p-2 cover_photo">
                     </div>
                     <div >
@@ -108,11 +119,7 @@
                             <ul class="p-2 list-unstyled show_detail" style="font-size: 14px">
                                 <li class=" d-flex justify-content-between">
                                     <span>Like</span>
-                                    <span><small>1 Likes</small></span>
-                                </li>
-                                <li class=" d-flex justify-content-between">
-                                    <span>Follower</span>
-                                    <span><small>1 Followers</small></span>
+                                    <span><small>{{$user->countlike($user->id)}} Likes</small></span>
                                 </li>
                                 <hr>
                                 <li class=" d-flex justify-content-between">
@@ -143,25 +150,125 @@
                         </div>
                         
                         <hr>
-                        {{-- <div class="d-flex">
-                            <a href="{{route('users.edit',$user->slug)}}"
-                                wire:navigate 
-                                class="w-100 btn btn-primary rounded-0 shadow-none outline-none">Edit</a>
-                            <a href="javascript:void(0)"
-                            data-bs-toggle="modal"
-                            data-bs-target="#delete_model"
-                            data-id={{$user->id}}  
-                            data-email = {{Auth::user()->email}}
-                            class="w-100 btn btn-outline-primary rounded-0 shadow-none outline-none delete_btn">Delete</a>
-                        </div> --}}
-                        <form id="formdelete{{$user->id}}" action="{{route('users.destroy',$user->id)}}" method="POST">
-                            {{ csrf_field() }}
-                            {{ method_field('DELETE') }}
-                            <input type="hidden" name="dayable_type" value="App\Models\User">
-                        </form>
+                        @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2)
+                            <div class="d-flex">
+                                <a href="javascript:void(0)" 
+                                data-bs-toggle = "modal"
+                                data-bs-target="#user_login_edit_form"
+                                class="w-100 btn btn-primary rounded-0">Edit</a>
+                                <a href="javascript:void(0)"
+                                data-bs-toggle="modal"
+                                data-bs-target="#delete_model"
+                                data-id={{$user->id}} 
+                                data-email = {{Auth::user()->email}}
+                                class="w-100 btn btn-outline-primary rounded-0 shadow-none outline-none delete_btn">Delete</a>
+                            </div>
+                            <form id="formdelete{{$user->id}}" action="{{route('users.destroy',$user->id)}}" method="POST">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                <input type="hidden" name="dayable_type" value="App\Models\User">
+                            </form>
+
+                            {{-- start confirm box --}}
+                            <div id="delete_model" class="modal fade">
+                                <div class="modal-dialog modal-sm modal-dialog-center">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h6>Confrim Delete</h6>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="" id="editform" method="POST">
+
+                                                <div class="row">
+                                                    <div class="col-12 mb-3 form-group">
+                                                        <input type="email" class="form-control rounded-0 outline-none shadow-none border confirm_email_box" placeholder="Confirm Your Email" value="">
+                                                    </div>
+                                                    <div class="col-12 mb-3">
+                                                        <div class="d-flex justify-content-end">
+                                                            <button type="button" class="btn btn-primary rounded-0 outline-none shadow-none confirm_email">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- end confirm box --}}
+                        @endif
+
 
                     </div>
                 </div>
+
+                {{-- start user edit log in form modal --}}
+                <div id="user_login_edit_form" class="modal fade">
+                    <div class="modal-dialog modal-lg modal-dialog-center">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6>Edit User Info</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{route('users.update',$user->id)}}" method="POST">
+                                    @csrf
+                                    @method("PUT")
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-12 mb-2 form-group">
+                                            <label for="name">User Name</label>
+
+                                            <input type="text" name="name" id="name" class="form-control rounded-1 outline-none shadow-none border" value="{{old('name',$user->name)}}" placeholder="Enter Your Name" readonly>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12 mb-2 form-group">
+                                            <label for="email">User Email</label>
+                                            <input type="email" name="email" id="email" class="form-control rounded-1 outline-none shadow-none border" value="{{old('email',$user->email)}}" placeholder="Enter Your Email" readonly>
+                                        </div>
+                                        @if (Auth::user()->role_id === 1 || Auth::user()->role_id === 2)
+                                            <div class="col-md-6 col-sm-12 mb-2 form-group">
+                                                <label for="status_id">Status</label>
+                                                <select name="status_id" id="status_id" class="form-select rounded-0 shadow-none outline-none">
+                                                    <option value="" selected disabled>Choose Status</option>
+                                                    @foreach ($statuses as $id => $name)
+                                                        <option value="{{$id}}"  {{$id == $user->status_id ? "selected" : ""}}>{{$name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12 mb-2 form-group">
+                                                <label for="role_id">Role</label>
+                                                <select name="role_id" id="role_id" class="form-select rounded-0 shadow-none outline-none">
+                                                    <option value="" selected disabled>Choose Role</option>
+                                                    @foreach ($roles as $id => $name)
+                                                        <option value="{{$id}}"  {{$id == $user->role_id ? "selected" : ""}}>{{$name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        @endif
+
+                                        <div class="col-md-6 col-sm-12 mb-2 form-group">
+                                            <label for="gender_id">Gender</label>
+                                            <input type="text" name="gender" id="gender" class="form-control rounded-1 outline-none shadow-none border" value="{{old('gender',$user->gender->name)}}"  readonly>
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12 mb-2 form-group">
+                                            <label for="city_id">City</label>
+                                            <input type="text" name="city" id="city" class="form-control rounded-1 outline-none shadow-none border" value="{{old('gender',$user->city->name)}}"  readonly>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 mb-2 form-group">
+                                            <label for="country_id">Country</label>
+                                            <input type="text" name="country" id="country" class="form-control rounded-1 outline-none shadow-none border" value="{{old('gender',$user->country->name)}}" readonly>
+                                        </div>
+                                        <div class="text-end">
+                                            <button type="submit" class="btn btn-primary rounded-0">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- end user edit log in form modal --}}
 
                 <div class="col-md-8 col-sm-12">
                     <div class="mb-5">
