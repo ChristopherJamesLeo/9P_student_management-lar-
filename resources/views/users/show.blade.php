@@ -430,7 +430,7 @@
                             @foreach ($enrolls as $enroll)
                                 <div class="col-md-4 col-sm-6 mb-2">
                                     <div class="p-2 border d-flex flex-column gap-2 enroll_container">
-                                        <span><a href="{{route('posts.show',$enroll->post->id)}}" wire:navigate>{{$enroll->post->name}}</a></span>
+                                        <span><a href="{{route('posts.show',$enroll->post->slug)}}" wire:navigate>{{$enroll->post->name}}</a></span>
                                         <span>{{$enroll->stage->name}}</span>
                                         <span>{{$enroll->updated_at->diffForHumans()}}</span>
                                     </div>
